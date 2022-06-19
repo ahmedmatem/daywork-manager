@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { exhaustMap, map, Observable, take } from "rxjs";
+import { map, Observable } from "rxjs";
 import { DB_URL, KEY_DAYWORKS } from "../../app.config";
 import { AuthService } from "../../auth/auth.service";
 import { User } from "../../auth/user.model";
