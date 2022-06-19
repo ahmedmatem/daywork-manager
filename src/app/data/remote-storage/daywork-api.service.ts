@@ -1,9 +1,8 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map, Observable } from "rxjs";
+import { forkJoin, map, Observable } from "rxjs";
 import { DB_URL, KEY_DAYWORKS } from "../../app.config";
 import { AuthService } from "../../auth/auth.service";
-import { User } from "../../auth/user.model";
 import { DateRange } from "../../models/DateRange";
 import { Daywork } from "../../models/Daywork";
 import { IDictionary } from "../../share/utils";
@@ -14,12 +13,24 @@ export class DayworkApiService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   save(dateRange: DateRange, ...workersDayworks: { workerId: string, dayworks: Daywork[] }[]) {
+    const reqs: Observable<any>[] = []
     workersDayworks?.forEach(wd => {
-      this.http.put(this.setUrl(wd.workerId, dateRange), wd.dayworks)
-        .subscribe(response => {
-          //console.log(response)
-        })
+      const url = `${DB_URL}${KEY_DAYWORKS}/${dateRange.toString()}/${wd.workerId}.json`
+      const req = this.http.put(url, wd.dayworks)
+      reqs.push(req)
     })
+
+    if (reqs) {
+      forkJoin(reqs)
+        .subscribe(
+          response => {
+            console.log('Dayworks was successfully saved.')
+          },
+          error => {
+            console.log('Some error occured!')
+          }
+        )
+    }
   }
 
   getDayworks(dateRange: DateRange): Observable<IDictionary<Daywork[]>> {
@@ -34,13 +45,5 @@ export class DayworkApiService {
           }
           return result
         }))
-  }
-
-  private setUrl(workerId: string, dateRange: DateRange): string {
-    /**
-     *      base_api_url/dw/{   dateRange    }/{     workerId     }.json
-     * url: base_api_url/dw/2022-6-6-2022-6-19/-N3kYDkUV-EVEH6Rrsxg.json
-     * */
-    return `${DB_URL}${KEY_DAYWORKS}/${dateRange.toString()}/${workerId}.json`
   }
 }
