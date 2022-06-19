@@ -1,0 +1,47 @@
+<div class="container">
+  <h2>Worker list</h2>
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <input [(ngModel)]="workerName"
+             class="form-control"
+             type="text"
+             placeholder="Type worker name">
+    </div>
+    <div class="col-xs-12 col-md-6">
+      <button (click)="addWorker()"
+              class="btn btn-primary"
+              [disabled]="workerName == ''">
+        Add Worker
+      </button>
+    </div>
+  </div>
+
+  <br />
+
+  <!-- Error alert -->
+  <ngb-alert *ngIf="errorMessage">{{ errorMessage }}</ngb-alert>
+
+  <hr />
+
+  <div *ngIf="loading" class="text-center">
+    <div *ngIf="loading" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+  </div>
+
+  <!-- List of workers -->
+  <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+    <ngb-panel *ngFor="let worker of workers" title="{{ worker.name }}">
+      <ng-template ngbPanelContent>
+
+        <app-worker-detail [worker]="worker"
+                           [autoTracking]="worker.autoTracking"></app-worker-detail>
+
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+
+  <br />
+
+  <button type="button" class="btn btn-primary me-2" (click)="onStoreWorkers()">Store workers</button>
+  <button type="button" class="btn btn-primary" (click)="onFetchWorkers()">Fetch workers</button>
+
+</div>

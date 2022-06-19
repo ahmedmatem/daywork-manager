@@ -1,0 +1,35 @@
+<nav class="navbar navbar-dark navbar-expand-lg bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Ivo PFP</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item" *ngIf="isAuthenticated">
+          <a class="nav-link active"
+             aria-current="page"
+             routerLinkActive="active"
+             routerLink="/workers">Workers</a>
+        </li>
+        <li class="nav-item" *ngIf="isAuthenticated">
+          <a class="nav-link"
+             routerLinkActive="active"
+             routerLink="/dayworks">Dayworks</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav justify-content-end">
+        <li class="nav-item" *ngIf="!isAuthenticated">
+          <a class="nav-link"
+             routerLinkActive="active"
+             routerLink="/auth">Login</a>
+        </li>
+        <li class="nav-item" *ngIf="isAuthenticated">
+          <a class="nav-link"
+             style="cursor: pointer"
+             (click)="onLogout()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

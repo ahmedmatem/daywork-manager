@@ -1,0 +1,33 @@
+<strong>Registration date</strong>
+<div>{{worker.registeredOn.toDateString()}}</div>
+
+<br />
+
+<strong>Auto track working days</strong>
+<div>
+  <input type="checkbox" [checked]="autoTracking" (click)="toogleAutoTracking()" />
+  Auto tracking
+</div>
+<div class="btn-group clearfix" role="group" aria-label="Basic example">
+  <button type="button"
+          class="btn"
+          [disabled]="!autoTracking"
+          [ngClass]="{'btn-success': trackingDay.tracked, 'btn-danger': !trackingDay.tracked}"
+          (click)="toogleDayTracking(dayIndex)"
+          *ngFor="let trackingDay of worker.trackingDays; let dayIndex = index">
+    {{trackingDay.day}}
+    <i *ngIf="trackingDay.tracked" class="bi bi-check"></i>
+    <i *ngIf="!trackingDay.tracked" class="bi bi-x"></i>
+  </button>
+</div>
+<div class="mt-1" *ngIf="worker.isSyncRequired">
+  <button class="btn btn-outline-danger"
+          (click)="sync()"
+          [disabled]="isSyncFail">
+    <i class="bi bi-cloud-upload"></i> Sync
+  </button>&nbsp;<span *ngIf="!isSyncFail else syncFail">Use this button to upload changes have done</span>
+</div>
+
+<ng-template #syncFail>
+  No internet connection. Try again later.
+</ng-template>
