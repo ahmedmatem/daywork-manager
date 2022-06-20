@@ -20,7 +20,7 @@ export class WorkerRepositoryService {
   onWorkersChanged = new Subject<Worker[]>()
   onErrorOcurred = new Subject<string>()
   onSyncFail = new Subject<void>()
-  onDayworksDownloaded = new Subject<IDictionary<Daywork[]>>()
+  onDayworksChanged = new Subject<IDictionary<Daywork[]>>()
 
   constructor(
     private workerApiService: WorkerApiService,
@@ -28,7 +28,7 @@ export class WorkerRepositoryService {
     private dayworkApiService: DayworkApiService,
     private dayworlLocalStoirage: DayworkLocalstorageService) {
 
-    // Load workers from local storage
+    // Try loading workers from local storage
     this.workers = this.workerLocalStorage.getWorkers()
     if (this.workers.length === 0) {
       // In case of no workers saved in local storage request workers from remote storage
@@ -47,7 +47,9 @@ export class WorkerRepositoryService {
    * This function retrieves all dayworks for all workers
    * in given dateRange from local storage
    * */
-  getDayworksLS(dateRange: DateRange): { workerId: string, dayworks: Daywork[] }[] {
+
+  workersDayworksFromLocalStorage(dateRange: DateRange)
+    : { workerId: string, dayworks: Daywork[] }[] {
     const result: {workerId: string, dayworks: Daywork[]}[] = []
     this.workers?.forEach(worker => {
       result.push({
@@ -63,21 +65,37 @@ export class WorkerRepositoryService {
    * all workers from remote server.
    * @param dateRange
    */
-  getDayworksRS(dateRange: DateRange) {
+
+  workersDayworksFromRemoteDb(dateRange: DateRange) {
     const result: { workerId: string, dayworks: Daywork[] }[] = []
     this.dayworkApiService.getDayworks(dateRange)
       .subscribe(dayworks => {
         this.dayworks = dayworks
-        this.onDayworksDownloaded.next(this.dayworks)
+        this.onDayworksChanged.next(this.dayworks)
       })
   }
 
-  saveDayworks(dateRange: DateRange, ...workersDayworks: { workerId: string, dayworks: Daywork[] }[]) {
+  /**
+   * Save workers dayworks in both local storage and remote database.
+   * 
+   * @param dateRange
+   * @param workersDayworks
+   */
+
+  saveDayworks(
+    dateRange: DateRange,
+    ...workersDayworks: { workerId: string, dayworks: Daywork[] }[]) {
     this.dayworkApiService.save(dateRange, ...workersDayworks)
     this.dayworlLocalStoirage.save(dateRange, ...workersDayworks)
   }
 
-  storeWorker(worker: Worker) {
+  /**
+   * Save worker in both local storage and remote database.
+   * 
+   * @param worker
+   */
+
+  saveWorker(worker: Worker) {
     // Store worker in remote storage
     this.workerApiService.storeWorker(worker)
       .subscribe(

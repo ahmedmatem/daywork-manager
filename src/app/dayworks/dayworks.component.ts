@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { Subject } from 'rxjs'
 import { WorkerRepositoryService } from '../data/worker-repository.service'
 
 import { DateRange } from '../models/DateRange'
@@ -12,35 +13,33 @@ import { IDictionary } from '../share/utils'
   styleUrls: ['./dayworks.component.css']
 })
 export class DayworksComponent implements OnInit {
+
   dateRange = new DateRange()
   workers: Worker[] | undefined
-  dayworks: { workerId: string, dayworks: Daywork[] }[] = []
+  //dayworks: { workerId: string, dayworks: Daywork[] }[] = []
   workersDayworks = {} as IDictionary<Daywork[]>
 
   constructor(private workerRepo: WorkerRepositoryService) { }
 
   ngOnInit(): void {
-    this.workerRepo.onDayworksDownloaded.subscribe(dayworks => {
-      this.workersDayworks = dayworks
-      })
     this.workerRepo.onWorkersChanged.subscribe(workers => {
         this.workers = workers
       })
 
     this.workers = this.workerRepo.getWorkers()
-    this.workerRepo.getDayworksRS(this.dateRange)
+    this.workerRepo.workersDayworksFromRemoteDb(this.dateRange)
   }
 
   onPrevDateRange() {
     this.dateRange.setPrev()
     // Reload dayworks for new dateRange
-    this.workerRepo.getDayworksRS(this.dateRange)
+    this.workerRepo.workersDayworksFromRemoteDb(this.dateRange)
   }
 
   onNextDateRange() {
     this.dateRange.setNext()
     // Reload dayworks for new dateRange
-    this.workerRepo.getDayworksRS(this.dateRange)
+    this.workerRepo.workersDayworksFromRemoteDb(this.dateRange)
   }
 
   hasNextDateRange(): boolean {
@@ -49,6 +48,7 @@ export class DayworksComponent implements OnInit {
   }
 
   getWorkerDayworks(worker: Worker): Daywork[] | undefined {
-    return this.dayworks.find(d => d.workerId === worker.id)?.dayworks
+    return this.workersDayworks[worker.id]
+    //return this.dayworks.find(d => d.workerId === worker.id)?.dayworks
   }
 }

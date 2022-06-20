@@ -1,4 +1,5 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { DAYS_IN_DATE_RANGE } from '../../app.config';
 import { WorkerRepositoryService } from '../../data/worker-repository.service';
 import { DateRange } from '../../models/DateRange';
@@ -10,25 +11,33 @@ import { Worker } from '../../models/Worker';
   templateUrl: './worker-dayworks.component.html',
   styleUrls: ['./worker-dayworks.component.css']
 })
-export class WorkerDayworksComponent implements OnInit, OnChanges {
+export class WorkerDayworksComponent implements OnInit, OnDestroy {
   @Input() dayworks!: Daywork[]
   @Input() dateRange!: DateRange
   @Input() worker!: Worker
   totalDayworks = 0
 
+  dayworksChangedSubscription: Subscription = new Subscription
+
   constructor(private workerRepo: WorkerRepositoryService) { }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    //console.log(changes['dayworks'])
-    const dayworksChanges = changes['dayworks']
-    if (dayworksChanges.currentValue) {
-      this.calculateTotalDayworksInRange()
-    }
-  }
+  //ngOnChanges(changes: SimpleChanges): void {
+  //  //console.log(changes['dayworks'])
+  //  const dayworksChanges = changes['dayworks']
+  //  if (dayworksChanges.currentValue) {
+  //    this.calculateTotalDayworksInRange()
+  //  }
+  //}
 
 
   ngOnInit(): void {
     this.setDayworks()
+    this.calculateTotalDayworksInRange()
+    this.dayworksChangedSubscription = this.workerRepo.onDayworksChanged.subscribe(wd => {
+      this.dayworks = wd[this.worker.id]
+      this.setDayworks()
+      this.calculateTotalDayworksInRange()
+    })
   }
 
   toogleDaywork(dayIndex: number) {
@@ -39,6 +48,10 @@ export class WorkerDayworksComponent implements OnInit, OnChanges {
     }
     this.calculateTotalDayworksInRange()
     this.workerRepo.saveDayworks(this.dateRange, { workerId: this.worker.id, dayworks: this.dayworks })
+  }
+
+  ngOnDestroy(): void {
+    this.dayworksChangedSubscription.unsubscribe()
   }
 
   private setDayworks() {
@@ -72,7 +85,7 @@ export class WorkerDayworksComponent implements OnInit, OnChanges {
     return this.dayworks?.length === (DAYS_IN_DATE_RANGE + 1)
   }
 
-  calculateTotalDayworksInRange() {
+  private calculateTotalDayworksInRange() {
     this.totalDayworks = 0
     this.dayworks?.forEach(dw => {
       if (dw.status === true) this.totalDayworks++

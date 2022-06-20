@@ -67,7 +67,7 @@ export class WorkersComponent implements OnInit {
       this.errorMessage = undefined
       this.workerName = ''
 
-      this.workerRepository.storeWorker(newWorker)
+      this.workerRepository.saveWorker(newWorker)
     }
   }
 
