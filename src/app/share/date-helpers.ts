@@ -1,3 +1,14 @@
+declare global {
+  interface Date {
+    before(date: Date): boolean
+    after(date: Date): boolean
+  }
+
+  interface DateConstructor {
+    
+  }
+}
+
 /**
  * 
  * @param month - expected value range: 0..11 (0 for january)
@@ -10,3 +21,12 @@ export const getLastDayOfMonth = (month: number): number => {
   return new Date(2022, month + 1, 0).getDate()
 }
 
+Date.prototype.before = function (this: Date, date: Date) {
+  return this.getTime() < date.getTime()
+}
+
+Date.prototype.after = function (this: Date, date: Date) {
+  return this.getTime() > date.getTime()
+}
+
+export { }

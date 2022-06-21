@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DAYS_IN_DATE_RANGE } from '../../app.config';
 import { WorkerRepositoryService } from '../../data/worker-repository.service';
@@ -21,22 +21,13 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
 
   constructor(private workerRepo: WorkerRepositoryService) { }
 
-  //ngOnChanges(changes: SimpleChanges): void {
-  //  //console.log(changes['dayworks'])
-  //  const dayworksChanges = changes['dayworks']
-  //  if (dayworksChanges.currentValue) {
-  //    this.calculateTotalDayworksInRange()
-  //  }
-  //}
-
 
   ngOnInit(): void {
     this.setDayworks()
-    this.calculateTotalDayworksInRange()
+
     this.dayworksChangedSubscription = this.workerRepo.onDayworksChanged.subscribe(wd => {
       this.dayworks = wd[this.worker.id]
       this.setDayworks()
-      this.calculateTotalDayworksInRange()
     })
   }
 
@@ -57,11 +48,33 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   private setDayworks() {
     this.fillUpDayworksArrayIfRequired()
 
+    const today = new Date()
     this.dayworks?.forEach((dw, dayIndex) => {
+      // Return if current date is after today
+      const date = this.dateFromDayworkDay(dw.day)
+      if (date.after(today)) {
+        return
+      }
+
       if (!dw.isDefined && this.worker.autoTracking) {
         this.setDayworkByAutotracker(dayIndex)
       }
     })
+
+    this.calculateTotalDayworksInRange()
+  }
+
+  private dateFromDayworkDay(day: number): Date {
+    let year = this.dateRange.startDate.getFullYear()
+    let month = this.dateRange.startDate.getMonth()
+
+    const firstDayOfMonthInRange = this.dateRange.startDate.getDate()
+    if (day < firstDayOfMonthInRange) {
+      year = this.dateRange.endDate.getFullYear()
+      month = this.dateRange.endDate.getMonth()
+    }
+    
+    return new Date(year, month, day)
   }
 
   private setDayworkByAutotracker(dayIndex: number) {
@@ -77,7 +90,9 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
 
     const length = this.dayworks?.length
     for (let i = length; i <= DAYS_IN_DATE_RANGE; i++) {
-      this.dayworks.push(new Daywork())
+      const newDaywork = new Daywork()
+      newDaywork.day = this.dateRange.days()[i]
+      this.dayworks.push(newDaywork)
     }
   }
 
