@@ -5,9 +5,12 @@ import { getLastDayOfMonth } from '../share/date-helpers'
 export class DateRange {
   startDate!: Date
   endDate!: Date
+  isTodayInRange: boolean = false
+  today = new Date().getDate()
 
   constructor() {
     this.initRange()
+    this.isTodayInRange = new Date().between(this.startDate, this.endDate)
   }
 
   setNext() {

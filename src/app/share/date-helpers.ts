@@ -2,6 +2,7 @@ declare global {
   interface Date {
     before(date: Date): boolean
     after(date: Date): boolean
+    between(date1: Date, date2: Date): boolean
   }
 
   interface DateConstructor {
@@ -27,6 +28,13 @@ Date.prototype.before = function (this: Date, date: Date) {
 
 Date.prototype.after = function (this: Date, date: Date) {
   return this.getTime() > date.getTime()
+}
+
+Date.prototype.between = function (this: Date, date1: Date, date2: Date) {
+  if (date1.before(date2)) {
+    return date1.getTime() < this.getTime() && this.getTime() < date2.getTime()
+  }
+  return date2.getTime() < this.getTime() && this.getTime() < date1.getTime()
 }
 
 export { }
