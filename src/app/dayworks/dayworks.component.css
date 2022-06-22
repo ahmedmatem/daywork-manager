@@ -25,3 +25,7 @@
   .custom-day.faded {
     background-color: rgba(2, 117, 216, 0.5);
   }
+
+.text-responsive {
+  font-size: calc(25% + 1vw + 1vh);
+}

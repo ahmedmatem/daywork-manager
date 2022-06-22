@@ -8,9 +8,9 @@
   <input type="checkbox" [checked]="autoTracking" (click)="toogleAutoTracking()" />
   Auto tracking
 </div>
-<div class="btn-group clearfix" role="group" aria-label="Basic example">
+<div class="btn-group btn-group-sm clearfix" role="group" aria-label="Basic example">
   <button type="button"
-          class="btn"
+          class="btn btn-sm text-responsive"
           [disabled]="!autoTracking"
           [ngClass]="{'btn-success': trackingDay.tracked, 'btn-danger': !trackingDay.tracked}"
           (click)="toogleDayTracking(dayIndex)"
@@ -20,6 +20,7 @@
     <i *ngIf="!trackingDay.tracked" class="bi bi-x"></i>
   </button>
 </div>
+
 <div class="mt-1" *ngIf="worker.isSyncRequired">
   <button class="btn btn-outline-danger"
           (click)="sync()"
