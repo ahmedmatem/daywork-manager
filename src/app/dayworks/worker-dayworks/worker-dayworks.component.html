@@ -15,22 +15,22 @@
     <tbody>
       <tr>
         <td class="text-center pt-0" style="width:14%"
-            [ngClass]="{'today-pin': dateRange.isTodayInRange && dateRange.days()[dayIndex] === dateRange.today}"
+            [ngClass]="{'bg-warning': dateRange.isTodayInRange && dateRange.days()[dayIndex] === dateRange.today}"
             *ngFor="let dw of dayworks?.slice(0,7) let dayIndex=index"
             (click)="toogleDaywork(dayIndex)">
           <div class="float-end">{{dateRange.days()[dayIndex]}}</div>
-          <div class="mt-4" *ngIf="dw.status">
+          <div class="mt-4" *ngIf="dw.status else placeholderIcon">
             <i class="bi bi-check-circle text-success"></i>
           </div>
         </td>
       </tr>
       <tr>
         <td class="text-center pt-0"
-            [ngClass]="{'today-pin': dateRange.isTodayInRange && dateRange.days()[7+dayIndex] === dateRange.today}"
+            [ngClass]="{'bg-warning': dateRange.isTodayInRange && dateRange.days()[7+dayIndex] === dateRange.today}"
             *ngFor="let dw of dayworks?.slice(7,14) let dayIndex=index"
             (click)="toogleDaywork(dayIndex+7)">
           <div class="float-end">{{dateRange.days()[7+dayIndex]}}</div>
-          <div class="mt-4" *ngIf="dw.status">
+          <div class="mt-4" *ngIf="dw.status else placeholderIcon">
             <i class="bi bi-check-circle text-success"></i>
           </div>
         </td>
@@ -41,3 +41,9 @@
 <div class="clearfix">
   <div class="float-end text-muted">Total Dayworks: {{totalDayworks}}</div>
 </div>
+
+<ng-template #placeholderIcon>
+  <div class="mt-4">
+    <i class="bi bi-plus text-white"></i>
+  </div>
+</ng-template>
