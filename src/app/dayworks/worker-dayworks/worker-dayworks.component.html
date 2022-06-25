@@ -43,7 +43,9 @@
   </table>
 </div>
 <div class="clearfix">
-  <div class="float-end text-muted">Total Dayworks: {{totalDayworks}}</div>
+  <div class="float-end text-muted">
+  Total: {{totalDays}}d<span *ngIf="hours !== 0"> {{hours}}h</span>
+  </div>
 </div>
 
 <ng-template #placeholderIcon>

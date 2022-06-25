@@ -21,7 +21,8 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
 
   @ViewChildren('popOver') popovers!: QueryList<NgbPopover>
 
-  totalDayworks = 0
+  totalDays = 0
+  hours = 0
   selectedDate!: Date
 
   private _isSingleClick = true
@@ -164,10 +165,20 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   //}
 
   private calculateTotalDayworksInRange() {
-    this.totalDayworks = 0
+    this.totalDays = 0
+    let diffHoursSum = 0
     this.dayworks?.forEach(dw => {
-      if (dw.status === true) this.totalDayworks++
+      if (dw.status === true) {
+        diffHoursSum += dw.diffHours === undefined ? 0 : dw.diffHours
+        this.totalDays++
+      }
     })
+
+    this.totalDays += Math.floor(diffHoursSum / 8)
+    this.hours = diffHoursSum % 8
+    if (this.hours < 0) {
+      this.hours += 8
+    }
   }
 
   private closePopover() {
