@@ -19,15 +19,14 @@ export class DayworksComponent implements OnInit {
   //dayworks: { workerId: string, dayworks: Daywork[] }[] = []
   workersDayworks = {} as IDictionary<Daywork[]>
 
-  constructor(private workerRepo: WorkerRepositoryService) { }
+  constructor( private workerRepo: WorkerRepositoryService ) { }
 
   ngOnInit(): void {
     this.workerRepo.onWorkersChanged.subscribe(workers => {
         this.workers = workers
-      })
+    })
 
     this.workers = this.workerRepo.getWorkers()
-    this.workerRepo.workersDayworksFromRemoteDb(this.dateRange)
   }
 
   onPrevDateRange() {

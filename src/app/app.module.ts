@@ -16,6 +16,7 @@ import { AuthComponent } from './auth/auth.component';
 import { HeaderComponent } from './header/header.component';
 import { LoadingSpinnerComponent } from './share/loading-spinner/loading-spinner.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { NumberPickerComponent } from './share/number-picker/number-picker.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     WorkerDayworksComponent,
     AuthComponent,
     HeaderComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    NumberPickerComponent
   ],
   imports: [
     BrowserModule,

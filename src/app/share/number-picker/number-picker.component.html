@@ -1,0 +1,21 @@
+<div class="input-group">
+  <button class="btn btn-outline-success"
+          type="button"
+          id="button-minus"
+          [disabled]="isMinValue"
+          (click)="onMinusClick()">
+    <i class="bi bi-dash-circle"></i>
+  </button>
+  <button class="btn btn-outline-success"
+          [disabled]="value === 0"
+          (click)="onNumberPicked()">
+    Set {{value}} hour<span *ngIf="value > 1 || value < -1">s</span>
+  </button>
+  <button class="btn btn-outline-success"
+          type="button"
+          id="button-plus"
+          [disabled]="isMaxValue"
+          (click)="onPlusClick()">
+    <i class="bi bi-plus-circle"></i>
+  </button>
+</div>

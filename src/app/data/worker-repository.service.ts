@@ -67,7 +67,7 @@ export class WorkerRepositoryService {
    */
 
   workersDayworksFromRemoteDb(dateRange: DateRange) {
-    const result: { workerId: string, dayworks: Daywork[] }[] = []
+    //const result: { workerId: string, dayworks: Daywork[] }[] = []
     this.dayworkApiService.getDayworks(dateRange)
       .subscribe(dayworks => {
         this.dayworks = dayworks

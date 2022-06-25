@@ -13,10 +13,12 @@
     </thead>
     <tbody>
       <tr>
-        <td class="text-center pt-0" style="width:14%"
+        <td [ngbPopover]="popContent" #popOver="ngbPopover" [popoverTitle]="popTitle" triggers="dblclick"
+            class="text-center pt-0" style="width:14%"
             [ngClass]="{'bg-warning': dateRange.isTodayInRange && dateRange.days()[dayIndex] === dateRange.today}"
             *ngFor="let dw of dayworks?.slice(0,7) let dayIndex=index"
-            (click)="toogleDaywork(dayIndex)">
+            (click)="onDayworkClick(dayIndex)"
+            (dblclick)="onDayworkDoubleClick(dayIndex)">
           <div class="float-end">{{dateRange.days()[dayIndex]}}</div>
           <div class="mt-4" *ngIf="dw.status else placeholderIcon">
             <i class="bi bi-check-circle text-success"></i>
@@ -24,10 +26,12 @@
         </td>
       </tr>
       <tr>
-        <td class="text-center pt-0"
+        <td [ngbPopover]="popContent" #popOver="ngbPopover" [popoverTitle]="popTitle" triggers="dblclick"
+            class="text-center pt-0"
             [ngClass]="{'bg-warning': dateRange.isTodayInRange && dateRange.days()[7+dayIndex] === dateRange.today}"
             *ngFor="let dw of dayworks?.slice(7,14) let dayIndex=index"
-            (click)="toogleDaywork(dayIndex+7)">
+            (click)="onDayworkClick(dayIndex+7)"
+            (dblclick)="onDayworkDoubleClick(dayIndex+7)">
           <div class="float-end">{{dateRange.days()[7+dayIndex]}}</div>
           <div class="mt-4" *ngIf="dw.status else placeholderIcon">
             <i class="bi bi-check-circle text-success"></i>
@@ -46,3 +50,14 @@
     <i class="bi bi-plus text-white"></i>
   </div>
 </ng-template>
+
+<!-- Popover template -->
+
+<ng-template #popTitle>{{selectedDate.toDateString()}}</ng-template>
+
+<ng-template #popContent>
+  <p>Setup additional hours.</p>
+  <app-number-picker #hours></app-number-picker>
+</ng-template>
+
+
