@@ -162,19 +162,13 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
 
   private calculateTotalDayworksInRange() {
     this.totalDays = 0
-    let diffHoursSum = 0
+    this.hours = 0
     this.dayworks?.forEach(dw => {
       if (dw.status === true) {
-        diffHoursSum += dw.diffHours === undefined ? 0 : dw.diffHours
+        this.hours += dw.diffHours === undefined ? 0 : dw.diffHours
         this.totalDays++
       }
     })
-
-    this.totalDays += Math.floor(diffHoursSum / DAYWORK_DURATION_IN_HOURS)
-    this.hours = diffHoursSum % DAYWORK_DURATION_IN_HOURS
-    if (this.hours < 0) {
-      this.hours += DAYWORK_DURATION_IN_HOURS
-    }
   }
 
   private closePopover() {
