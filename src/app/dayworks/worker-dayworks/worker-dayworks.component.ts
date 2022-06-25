@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { NgbPopover, NgbPopoverConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
-import { DAYS_IN_DATE_RANGE } from '../../app.config';
+import { DAYS_IN_DATE_RANGE, DAYWORK_DURATION_IN_HOURS } from '../../app.config';
 import { WorkerRepositoryService } from '../../data/worker-repository.service';
 import { DateRange } from '../../models/DateRange';
 import { Daywork } from '../../models/Daywork';
@@ -160,10 +160,6 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
     }
   }
 
-  //private allDayworksAreInitialized(): boolean {
-  //  return this.dayworks?.length === (DAYS_IN_DATE_RANGE + 1)
-  //}
-
   private calculateTotalDayworksInRange() {
     this.totalDays = 0
     let diffHoursSum = 0
@@ -174,10 +170,10 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
       }
     })
 
-    this.totalDays += Math.floor(diffHoursSum / 8)
-    this.hours = diffHoursSum % 8
+    this.totalDays += Math.floor(diffHoursSum / DAYWORK_DURATION_IN_HOURS)
+    this.hours = diffHoursSum % DAYWORK_DURATION_IN_HOURS
     if (this.hours < 0) {
-      this.hours += 8
+      this.hours += DAYWORK_DURATION_IN_HOURS
     }
   }
 

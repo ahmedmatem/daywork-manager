@@ -1,6 +1,7 @@
 import { environment } from '../environments/environment'
 
 export const DAYS_IN_DATE_RANGE: number = 13 // two weeks
+export const DAYWORK_DURATION_IN_HOURS: number = 8
 
 export const API_KEY: string = environment.firebaseApiKey
 
