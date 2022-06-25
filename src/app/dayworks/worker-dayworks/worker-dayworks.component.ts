@@ -24,7 +24,8 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   totalDayworks = 0
   selectedDate!: Date
 
-  private isSingleClick = true
+  private _isSingleClick = true
+  private _currentDayIndex = 0
 
   private onDayworksChangedSubscription: Subscription = new Subscription
   private onNumberPickedSubscription: Subscription = new Subscription
@@ -49,19 +50,17 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
       })
 
     this.onNumberPickedSubscription =
-      this.numberPickerService.onNumberPicked.subscribe(n => {
-        this.popovers.forEach(pop => {
-          if (pop.isOpen()) {
-            pop.close()
-          }
-        })
+      this.numberPickerService.onNumberPicked.subscribe(diffHours => {
+        this.closePopover()
+        this.updateDaywork(this._currentDayIndex, diffHours, false)
       })
   }
 
   onDayworkClick(dayIndex: number) {
-    this.isSingleClick = true
+    this._isSingleClick = true
+    this._currentDayIndex = dayIndex
     setTimeout(() => {
-      if (this.isSingleClick) {
+      if (this._isSingleClick) {
         // Handle single click
         this.toogleDaywork(dayIndex)
       }
@@ -69,10 +68,15 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   }
 
   onDayworkDoubleClick(dayIndex: number) {
-    this.isSingleClick = false
+    this._isSingleClick = false
+    this._currentDayIndex = dayIndex
     // Handle double click
     const day = this.dayworks[dayIndex].day
     this.selectedDate = this.dateFromDayworkDay(day)
+  }
+
+  onPopoverClose() {
+    this.closePopover()
   }
 
   ngOnDestroy(): void {
@@ -85,11 +89,21 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   }
 
   private toogleDaywork(dayIndex: number) {
-    this.dayworks[dayIndex] = {
-      day: this.dayworks[dayIndex].day,
-      isDefined: true,
-      status: !this.dayworks[dayIndex].status
+    this.updateDaywork(dayIndex)
+  }
+
+  private updateDaywork(dayIndex: number, diffHours: number = 0, toogle: boolean = true) {
+    const dw = new Daywork()
+    dw.day = this.dayworks[dayIndex].day
+    dw.isDefined = true
+    dw.diffHours = diffHours
+    if (toogle) {
+      dw.status = !this.dayworks[dayIndex].status
+    } else {      
+      dw.status = true
     }
+
+    this.dayworks[dayIndex] = dw
     this.calculateTotalDayworksInRange()
     this.workerRepo.saveDayworks(this.dateRange, { workerId: this.worker.id, dayworks: this.dayworks })
   }
@@ -127,11 +141,11 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   }
 
   private setDayworkByAutotracker(dayIndex: number) {
-    this.dayworks[dayIndex] = {
-      day: this.dateRange.days()[dayIndex],
-      isDefined: true,
-      status: this.worker.trackingDays[dayIndex % 7].tracked
-    }
+    const dw = new Daywork()
+    dw.day = this.dateRange.days()[dayIndex]
+    dw.isDefined = true
+    dw.status = this.worker.trackingDays[dayIndex % 7].tracked
+    this.dayworks[dayIndex] = dw
   }
 
   private fillUpDayworksArrayIfRequired() {
@@ -153,6 +167,14 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
     this.totalDayworks = 0
     this.dayworks?.forEach(dw => {
       if (dw.status === true) this.totalDayworks++
+    })
+  }
+
+  private closePopover() {
+    this.popovers.forEach(pop => {
+      if (pop.isOpen()) {
+        pop.close()
+      }
     })
   }
 

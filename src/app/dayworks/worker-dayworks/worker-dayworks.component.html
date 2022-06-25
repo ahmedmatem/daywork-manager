@@ -23,6 +23,7 @@
           <div class="mt-4" *ngIf="dw.status else placeholderIcon">
             <i class="bi bi-check-circle text-success"></i>
           </div>
+          <div class="float-end" *ngIf="dw.status && dw.diffHours">{{dw.diffHours}}h</div>
         </td>
       </tr>
       <tr>
@@ -53,9 +54,15 @@
 
 <!-- Popover template -->
 
-<ng-template #popTitle>{{selectedDate.toDateString()}}</ng-template>
+<ng-template #popTitle>
+  Part-time Setup
+  <div class="float-end" (click)="onPopoverClose()">
+    <i class="bi bi-x-lg"></i>
+  </div>
+</ng-template>
 
 <ng-template #popContent>
+  <h2>{{selectedDate.toDateString()}}</h2>
   <p>Setup additional hours.</p>
   <app-number-picker #hours></app-number-picker>
 </ng-template>
