@@ -42,11 +42,20 @@
     </tbody>
   </table>
 </div>
-<div class="clearfix">
-  <div class="float-end text-muted" *ngIf="totalDays">
-  Total: {{totalDays}}d<span *ngIf="hours !== 0"> {{hours}}h</span>
+
+<div class="d-block clearfix">
+  <div class="float-end text-muted mr-2" *ngIf="totalDays">
+    Total: {{totalDays}}d<span *ngIf="hours !== 0"> {{hours}}h</span>
+    <button class="ms-2 btn btn-sm btn-success"
+            (click)="openModal(modalContent)">
+      ...<i class="bi bi-currency-pound"></i>
+    </button>
   </div>
 </div>
+
+<!--
+****** ng-templates *******
+-->
 
 <ng-template #placeholderIcon>
   <div class="mt-4 invisible">
@@ -69,4 +78,19 @@
   <app-number-picker #hours></app-number-picker>
 </ng-template>
 
-
+<!-- Calculate money Modal Template -->
+<ng-template #modalContent let-modal>
+  <!-- header -->
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <!-- body -->
+  <div class="modal-body">
+    Modal body goes here ...
+  </div>
+  <!-- footer -->
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>

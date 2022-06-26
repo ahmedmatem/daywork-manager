@@ -1,12 +1,12 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { NgbPopover, NgbPopoverConfig } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
-import { DAYS_IN_DATE_RANGE, DAYWORK_DURATION_IN_HOURS } from '../../app.config';
-import { WorkerRepositoryService } from '../../data/worker-repository.service';
-import { DateRange } from '../../models/DateRange';
-import { Daywork } from '../../models/Daywork';
-import { Worker } from '../../models/Worker';
-import { NumberPickerService } from '../../share/number-picker/number-picker.service';
+import { Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core'
+import { ModalDismissReasons, NgbModal, NgbPopover, NgbPopoverConfig } from '@ng-bootstrap/ng-bootstrap'
+import { Subscription } from 'rxjs'
+import { DAYS_IN_DATE_RANGE, DAYWORK_DURATION_IN_HOURS } from '../../app.config'
+import { WorkerRepositoryService } from '../../data/worker-repository.service'
+import { DateRange } from '../../models/DateRange'
+import { Daywork } from '../../models/Daywork'
+import { Worker } from '../../models/Worker'
+import { NumberPickerService } from '../../share/number-picker/number-picker.service'
 
 @Component({
   selector: 'app-worker-dayworks',
@@ -25,6 +25,8 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   hours = 0
   selectedDate!: Date
 
+  modalCloseResult = ''
+
   private _isSingleClick = true
   private _currentDayIndex = 0
 
@@ -35,7 +37,8 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
     private workerRepo: WorkerRepositoryService,
     private ngbPopoverConfig: NgbPopoverConfig,
     private ngbPopover: NgbPopover,
-    private numberPickerService: NumberPickerService) {
+    private numberPickerService: NumberPickerService,
+    private modalService: NgbModal) {
     ngbPopoverConfig.container = 'body'
     ngbPopoverConfig.autoClose = 'outside'
   }
@@ -55,6 +58,14 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
         this.closePopover()
         this.updateDaywork(this._currentDayIndex, diffHours, false)
       })
+  }
+
+  openModal(content: any) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.modalCloseResult = `Closed with: ${result}`
+    }, (reason) => {
+      this.modalCloseResult = `Dismissed ${this.getDismissReason(reason)}`
+    })
   }
 
   onDayworkClick(dayIndex: number) {
@@ -179,4 +190,13 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
     })
   }
 
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC'
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop'
+    } else {
+      return `with: ${reason}`
+    }
+  }
 }
