@@ -77,7 +77,7 @@
   <h2>{{selectedDate.toDateString()}}</h2>
   <p>Setup additional hours.</p>
   <app-number-picker
-    pickerTextPattern="Set [number] hour(s)"></app-number-picker>
+    [pickerText]=partTimeHourPickerText></app-number-picker>
 </ng-template>
 
 <!-- Calculate money Modal Template -->
@@ -92,10 +92,17 @@
     <pre>{{worker.name}}
 Period: {{dateRange.startDate | date: 'd/MM/YYYY'}} - {{dateRange.endDate | date: 'd/MM/YYYY'}}
 To date: {{today | date: 'd/MM/YYYY hh:mm'}}</pre>
-    <p>...</p>
+    <div class="mb-1">Payment per day</div>
+    <!--<app-number-picker
+      pickerTextPattern="£[number]"
+      [minValue]="120"
+      [maxValue]="200"
+      [step]="10"
+      [pickable]="false"
+      [defaultValue]="150"></app-number-picker>-->
   </div>
   <!-- footer -->
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-success" (click)="modal.close('Ok click')">Ok</button>
+    <button type="button" ngbAutoFocus class="btn btn-outline-success" (click)="modal.close('Ok click')">Ok</button>
   </div>
 </ng-template>

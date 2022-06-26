@@ -26,13 +26,16 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   selectedDate!: Date
   today = new Date()
 
+  partTimeHourPickerText!: string
+
   modalCloseResult = ''
 
   private _isSingleClick = true
   private _currentDayIndex = 0
 
   private onDayworksChangedSubscription: Subscription = new Subscription
-  private onNumberPickedSubscription: Subscription = new Subscription
+  private onPartTimeHourPickedSubscription: Subscription = new Subscription
+  private onPartTimeHourChangedSubscription: Subscription = new Subscription
 
   constructor(
     private workerRepo: WorkerRepositoryService,
@@ -40,6 +43,7 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
     private ngbPopover: NgbPopover,
     private numberPickerService: NumberPickerService,
     private modalService: NgbModal) {
+
     ngbPopoverConfig.container = 'body'
     ngbPopoverConfig.autoClose = 'outside'
   }
@@ -54,10 +58,16 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
         this.setDayworks()
       })
 
-    this.onNumberPickedSubscription =
+    this.onPartTimeHourPickedSubscription =
       this.numberPickerService.onNumberPicked.subscribe(diffHours => {
         this.closePopover()
         this.updateDaywork(this._currentDayIndex, diffHours, false)
+      })
+
+    this.onPartTimeHourChangedSubscription =
+      this.numberPickerService.onNumberChanged.subscribe(hours => {
+        this.partTimeHourPickerText = `Set ${hours} hour` +
+          ((hours > 1 || hours < -1) ? 's' : '')
       })
   }
 
@@ -86,6 +96,7 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
     // Handle double click
     const day = this.dayworks[dayIndex].day
     this.selectedDate = this.dateFromDayworkDay(day)
+    this.partTimeHourPickerText = 'Set hours'
   }
 
   onPopoverClose() {
@@ -96,8 +107,11 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
     if (this.onDayworksChangedSubscription) {
       this.onDayworksChangedSubscription.unsubscribe()
     }
-    if (this.onNumberPickedSubscription) {
-      this.onNumberPickedSubscription.unsubscribe()
+    if (this.onPartTimeHourPickedSubscription) {
+      this.onPartTimeHourPickedSubscription.unsubscribe()
+    }
+    if (this.onPartTimeHourChangedSubscription) {
+      this.onPartTimeHourChangedSubscription.unsubscribe()
     }
   }
 

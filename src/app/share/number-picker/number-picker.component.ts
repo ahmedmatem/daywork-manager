@@ -11,15 +11,9 @@ export class NumberPickerComponent implements OnInit {
   @Input() step: number = 1
   @Input() minValue: number = -8
   @Input() maxValue: number = 8
-  @Input() pickerTextPattern: string = ''
   @Input() pickable: boolean = true
+  @Input() pickerText = ''
 
-  /**
-   * If pickerTextPattern contains [number] in itself
-   * it will be replaced by property _value and assigned
-   * to property pickerText which will be displayed.
-   */
-  pickerText = ''
   isMinValue: boolean = false
   isMaxValue: boolean = false
 
@@ -29,7 +23,6 @@ export class NumberPickerComponent implements OnInit {
 
   ngOnInit(): void {
     this._value = this.defaultValue
-    this.updatePickerText()
   }
 
   onNumberPicked() {
@@ -44,7 +37,8 @@ export class NumberPickerComponent implements OnInit {
     if (this._value <= this.minValue) {
       this.isMinValue = true
     }
-    this.updatePickerText()
+
+    this.numberPickerService.onNumberChanged.next(this._value)
   }
 
   onPlusClick() {
@@ -55,14 +49,11 @@ export class NumberPickerComponent implements OnInit {
     if (this._value >= this.maxValue) {
       this.isMaxValue = true
     }
-    this.updatePickerText()
+
+    this.numberPickerService.onNumberChanged.next(this._value)
   }
 
   get value() {
     return this._value
-  }
-
-  private updatePickerText() {
-    this.pickerText = this.pickerTextPattern.replace('[number]', '' + this._value)
   }
 }

@@ -5,4 +5,5 @@ import { Subject } from "rxjs";
 export class NumberPickerService {
 
   @Output() onNumberPicked = new Subject<number>()
+  @Output() onNumberChanged = new Subject<number>()
 }
