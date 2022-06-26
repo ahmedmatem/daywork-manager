@@ -93,13 +93,13 @@
 Period: {{dateRange.startDate | date: 'd/MM/YYYY'}} - {{dateRange.endDate | date: 'd/MM/YYYY'}}
 To date: {{today | date: 'd/MM/YYYY hh:mm'}}</pre>
     <div class="mb-1">Payment per day</div>
-    <!--<app-number-picker
-      pickerTextPattern="£[number]"
+    <app-number-picker
+      [pickerText]=dayPayPickerText
       [minValue]="120"
       [maxValue]="200"
       [step]="10"
       [pickable]="false"
-      [defaultValue]="150"></app-number-picker>-->
+      [defaultValue]=dayPayDefaultValue></app-number-picker>
   </div>
   <!-- footer -->
   <div class="modal-footer">

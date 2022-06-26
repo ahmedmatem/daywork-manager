@@ -27,6 +27,8 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   today = new Date()
 
   partTimeHourPickerText!: string
+  dayPayPickerText!: string
+  dayPayDefaultValue: number = 150
 
   modalCloseResult = ''
 
@@ -36,6 +38,7 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   private onDayworksChangedSubscription: Subscription = new Subscription
   private onPartTimeHourPickedSubscription: Subscription = new Subscription
   private onPartTimeHourChangedSubscription: Subscription = new Subscription
+  private onDayPayChangedSubscription: Subscription = new Subscription
 
   constructor(
     private workerRepo: WorkerRepositoryService,
@@ -69,9 +72,16 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
         this.partTimeHourPickerText = `Set ${hours} hour` +
           ((hours > 1 || hours < -1) ? 's' : '')
       })
+
+    this.onDayPayChangedSubscription =
+      this.numberPickerService.onNumberChanged.subscribe(dayPay => {
+        this.dayPayPickerText = `£${dayPay}`
+      })
   }
 
   openModal(content: any) {
+    // Initialize picker text
+    this.dayPayPickerText = `£${this.dayPayDefaultValue}`
     this.modalService.open(content, { centered: true, ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.modalCloseResult = `Closed with: ${result}`
     }, (reason) => {
@@ -112,6 +122,9 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
     }
     if (this.onPartTimeHourChangedSubscription) {
       this.onPartTimeHourChangedSubscription.unsubscribe()
+    }
+    if (this.onDayPayChangedSubscription) {
+      this.onDayPayChangedSubscription.unsubscribe()
     }
   }
 
