@@ -43,7 +43,7 @@
   </table>
 </div>
 <div class="clearfix">
-  <div class="float-end text-muted">
+  <div class="float-end text-muted" *ngIf="totalDays">
   Total: {{totalDays}}d<span *ngIf="hours !== 0"> {{hours}}h</span>
   </div>
 </div>
