@@ -90,17 +90,23 @@
   </div>
   <!-- body -->
   <div class="modal-body">
-    <pre>{{worker.name}}
-Period: {{dateRange.startDate | date: 'd/MM/YYYY'}} - {{dateRange.endDate | date: 'd/MM/YYYY'}}
-To date: {{today | date: 'd/MM/YYYY hh:mm'}}</pre>
+    <pre><strong>{{worker.name}}</strong>
+Period: <strong>{{dateRange.startDate | date: 'd/MM/YYYY'}} - {{dateRange.endDate | date: 'd/MM/YYYY'}}</strong>
+Working days: <strong>{{totalDays}} days <span *ngIf="hours">[{{hours}}h]</span></strong>
+  <!--To date: {{today | date: 'd/MM/YYYY hh:mm'}}-->
+</pre>
+
+    <p class="text-success text-center" style="font-size: 3em">
+      £{{paymentAfterTax}}
+    </p>
+
     <div class="mb-1">Payment per day</div>
-    <app-number-picker
-      [pickerText]=dayPayPickerText
-      [minValue]="120"
-      [maxValue]="200"
-      [step]="10"
-      [pickable]="false"
-      [defaultValue]=dayPayDefaultValue></app-number-picker>
+    <app-number-picker [pickerText]=dayPayPickerText
+                       [minValue]="120"
+                       [maxValue]="200"
+                       [step]="10"
+                       [pickable]="false"
+                       [defaultValue]=dayPayDefaultValue></app-number-picker>
   </div>
   <!-- footer -->
   <div class="modal-footer">

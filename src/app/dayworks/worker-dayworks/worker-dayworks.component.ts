@@ -7,6 +7,7 @@ import { DateRange } from '../../models/DateRange'
 import { Daywork } from '../../models/Daywork'
 import { Worker } from '../../models/Worker'
 import { NumberPickerService } from '../../share/number-picker/number-picker.service'
+import { DayworksService } from '../dayworks.service'
 
 @Component({
   selector: 'app-worker-dayworks',
@@ -29,6 +30,7 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   partTimeHourPickerText!: string
   dayPayPickerText!: string
   dayPayDefaultValue: number = 150
+  paymentAfterTax!: number
 
   modalCloseResult = ''
 
@@ -38,12 +40,13 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   private onDayworksChangedSubscription: Subscription = new Subscription
   private onPartTimeHourPickedSubscription: Subscription = new Subscription
   private onPartTimeHourChangedSubscription: Subscription = new Subscription
-  private onDayPayChangedSubscription: Subscription = new Subscription
+  private onDaypayChangedSubscription: Subscription = new Subscription
 
   constructor(
     private workerRepo: WorkerRepositoryService,
-    private ngbPopoverConfig: NgbPopoverConfig,
-    private ngbPopover: NgbPopover,
+    private dayworksService: DayworksService,
+    ngbPopoverConfig: NgbPopoverConfig,
+    ngbPopover: NgbPopover,
     private numberPickerService: NumberPickerService,
     private modalService: NgbModal) {
 
@@ -73,15 +76,28 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
           ((hours > 1 || hours < -1) ? 's' : '')
       })
 
-    this.onDayPayChangedSubscription =
+    this.onDaypayChangedSubscription =
       this.numberPickerService.onNumberChanged.subscribe(dayPay => {
         this.dayPayPickerText = `£${dayPay}`
+        this.paymentAfterTax =
+          this.dayworksService.paymentAfterTax(
+            this.totalDays,
+            this.hours,
+            dayPay
+          )
       })
   }
 
   openModal(content: any) {
     // Initialize picker text
     this.dayPayPickerText = `£${this.dayPayDefaultValue}`
+    this.paymentAfterTax =
+      this.dayworksService.paymentAfterTax(
+        this.totalDays,
+        this.hours,
+        this.dayPayDefaultValue
+      )
+    
     this.modalService.open(content, { centered: true, ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.modalCloseResult = `Closed with: ${result}`
     }, (reason) => {
@@ -123,8 +139,8 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
     if (this.onPartTimeHourChangedSubscription) {
       this.onPartTimeHourChangedSubscription.unsubscribe()
     }
-    if (this.onDayPayChangedSubscription) {
-      this.onDayPayChangedSubscription.unsubscribe()
+    if (this.onDaypayChangedSubscription) {
+      this.onDaypayChangedSubscription.unsubscribe()
     }
   }
 
