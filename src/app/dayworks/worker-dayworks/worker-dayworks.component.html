@@ -48,6 +48,7 @@
   <div class="float-end text-muted mr-2" *ngIf="totalDays">
     Total: {{totalDays}}d<span *ngIf="hours !== 0"> {{hours}}h</span>
     <button class="ms-2 btn btn-sm btn-success"
+            *ngIf="dateRange.endDate.before(today)"
             (click)="openModal(modalContent)">
       ...<i class="bi bi-currency-pound"></i>
     </button>
