@@ -7,9 +7,9 @@
     <i class="bi bi-dash-circle"></i>
   </button>
   <button class="btn btn-outline-success"
-          [disabled]="value === 0"
+          [disabled]="value === 0 || !pickable"
           (click)="onNumberPicked()">
-    Set {{value}} hour<span *ngIf="value > 1 || value < -1">s</span>
+    {{pickerText}}
   </button>
   <button class="btn btn-outline-success"
           type="button"

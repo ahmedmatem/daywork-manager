@@ -37,6 +37,7 @@
           <div class="mt-4" *ngIf="dw.status else placeholderIcon">
             <i class="bi bi-check-circle text-success"></i>
           </div>
+          <div class="float-end" *ngIf="dw.status && dw.diffHours">{{dw.diffHours}}h</div>
         </td>
       </tr>
     </tbody>
@@ -75,22 +76,26 @@
 <ng-template #popContent>
   <h2>{{selectedDate.toDateString()}}</h2>
   <p>Setup additional hours.</p>
-  <app-number-picker #hours></app-number-picker>
+  <app-number-picker
+    pickerTextPattern="Set [number] hour(s)"></app-number-picker>
 </ng-template>
 
 <!-- Calculate money Modal Template -->
 <ng-template #modalContent let-modal>
   <!-- header -->
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    <h2 class="modal-title" id="modal-basic-title">Payment Info</h2>
+    <!--<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>-->
   </div>
   <!-- body -->
   <div class="modal-body">
-    Modal body goes here ...
+    <pre>{{worker.name}}
+Period: {{dateRange.startDate | date: 'd/MM/YYYY'}} - {{dateRange.endDate | date: 'd/MM/YYYY'}}
+To date: {{today | date: 'd/MM/YYYY hh:mm'}}</pre>
+    <p>...</p>
   </div>
   <!-- footer -->
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    <button type="button" class="btn btn-outline-success" (click)="modal.close('Ok click')">Ok</button>
   </div>
 </ng-template>

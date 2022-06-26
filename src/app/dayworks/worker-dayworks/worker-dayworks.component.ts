@@ -24,6 +24,7 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   totalDays = 0
   hours = 0
   selectedDate!: Date
+  today = new Date()
 
   modalCloseResult = ''
 
@@ -61,7 +62,7 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   }
 
   openModal(content: any) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    this.modalService.open(content, { centered: true, ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.modalCloseResult = `Closed with: ${result}`
     }, (reason) => {
       this.modalCloseResult = `Dismissed ${this.getDismissReason(reason)}`
