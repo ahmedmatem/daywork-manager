@@ -4,12 +4,16 @@ import { AdminComponent } from './admin/admin.component';
 import { AuthComponent } from './auth/auth.component';
 import { AuthGard } from './auth/auth.gard';
 import { DayworksComponent } from './dayworks/dayworks.component';
+import { Role } from './models/Role';
 import { WorkerDetailComponent } from './workers/worker-detail/worker-detail.component';
 import { WorkersComponent } from './workers/workers.component';
 
 const routes: Routes = [
   {
-    path: 'admin', component: AdminComponent, canActivate: [AuthGard],
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AuthGard],
+    data: { roles: [Role.Admin] },
     children: [
       { path: 'workers', component: WorkersComponent, canActivate: [AuthGard] },
       { path: 'dayworks', component: DayworksComponent, canActivate: [AuthGard] }
