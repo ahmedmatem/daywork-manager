@@ -5,12 +5,10 @@ import { getLastDayOfMonth } from '../share/date-helpers'
 export class DateRange {
   startDate!: Date
   endDate!: Date
-  isTodayInRange: boolean = false
-  today = new Date().getDate()
+  today = new Date()
 
   constructor() {
     this.initRange()
-    this.isTodayInRange = new Date().between(this.startDate, this.endDate)
   }
 
   setNext() {
@@ -23,6 +21,10 @@ export class DateRange {
     const oldStartDateCopy = new Date(this.startDate.getTime())
     this.startDate = new Date(oldStartDateCopy.setDate(oldStartDateCopy.getDate() - DAYS_IN_DATE_RANGE - 1))
     this.endDate = this.getEndDateBy(this.startDate)
+  }
+
+  isTodayInRange(): boolean {
+    return this.today.between(this.startDate, this.endDate)
   }
 
   days(): number[]{

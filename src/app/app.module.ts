@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 
 import { WorkersComponent } from './workers/workers.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAccordion, NgbModule, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { WorkerDetailComponent } from './workers/worker-detail/worker-detail.component';
 import { WorkerDayworksComponent } from './dayworks/worker-dayworks/worker-dayworks.component';

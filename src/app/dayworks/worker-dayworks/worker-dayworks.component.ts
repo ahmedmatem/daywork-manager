@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core'
 import { ModalDismissReasons, NgbModal, NgbPopover, NgbPopoverConfig } from '@ng-bootstrap/ng-bootstrap'
 import { Subscription } from 'rxjs'
 import { DAYS_IN_DATE_RANGE, DAYWORK_DURATION_IN_HOURS } from '../../app.config'
@@ -67,7 +67,7 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
     this.onPartTimeHourPickedSubscription =
       this.numberPickerService.onNumberPicked.subscribe(diffHours => {
         this.closePopover()
-        this.updateDaywork(this._currentDayIndex, diffHours, false)
+        this.toogleDaywork(this._currentDayIndex, diffHours, false)
       })
 
     this.onPartTimeHourChangedSubscription =
@@ -144,11 +144,11 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
     }
   }
 
-  private toogleDaywork(dayIndex: number) {
-    this.updateDaywork(dayIndex)
-  }
+  //private toogleDaywork(dayIndex: number) {
+  //  this.updateDaywork(dayIndex)
+  //}
 
-  private updateDaywork(dayIndex: number, diffHours: number = 0, toogle: boolean = true) {
+  private toogleDaywork(dayIndex: number, diffHours: number = 0, toogle: boolean = true) {
     const dw = new Daywork()
     dw.day = this.dayworks[dayIndex].day
     dw.isDefined = true
