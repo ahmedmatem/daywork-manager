@@ -17,6 +17,8 @@ import { HeaderComponent } from './header/header.component';
 import { LoadingSpinnerComponent } from './share/loading-spinner/loading-spinner.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { NumberPickerComponent } from './share/number-picker/number-picker.component';
+import { AdminComponent } from './admin/admin.component';
+import { AdminHeaderComponent } from './admin/admin-header/admin-header.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { NumberPickerComponent } from './share/number-picker/number-picker.compo
     AuthComponent,
     HeaderComponent,
     LoadingSpinnerComponent,
-    NumberPickerComponent
+    NumberPickerComponent,
+    AdminComponent,
+    AdminHeaderComponent
   ],
   imports: [
     BrowserModule,
