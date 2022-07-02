@@ -9,16 +9,16 @@ import { WorkerDetailComponent } from './workers/worker-detail/worker-detail.com
 import { WorkersComponent } from './workers/workers.component';
 
 const routes: Routes = [
-  {
-    path: 'admin',
-    component: AdminComponent,
-    canActivate: [AuthGard],
-    data: { roles: [Role.Admin] },
-    children: [
-      { path: 'workers', component: WorkersComponent, canActivate: [AuthGard] },
-      { path: 'dayworks', component: DayworksComponent, canActivate: [AuthGard] }
-    ]
-  },
+  //{
+  //  path: 'admin',
+  //  component: AdminComponent,
+  //  canActivate: [AuthGard],
+  //  data: { roles: [Role.Admin] },
+  //  children: [
+  //    { path: 'workers', component: WorkersComponent, canActivate: [AuthGard] },
+  //    { path: 'dayworks', component: DayworksComponent, canActivate: [AuthGard] }
+  //  ]
+  //},
   { path: '', redirectTo: '/dayworks', pathMatch: 'full' },
   { path: 'dayworks', component: DayworksComponent, canActivate: [AuthGard] },
   { path: 'workers', component: WorkersComponent, canActivate: [AuthGard] },

@@ -20,6 +20,8 @@ import { NumberPickerComponent } from './share/number-picker/number-picker.compo
 import { AdminComponent } from './admin/admin.component';
 import { AdminHeaderComponent } from './admin/admin-header/admin-header.component';
 import { AuthErrorinterceptor } from './auth/auth-error-interceptor';
+import { CreateUserComponent } from './users/create-user/create-user.component';
+import { AuthTokenHttpInterceptor } from './auth/auth-token.interceptor';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { AuthErrorinterceptor } from './auth/auth-error-interceptor';
     LoadingSpinnerComponent,
     NumberPickerComponent,
     AdminComponent,
-    AdminHeaderComponent
+    AdminHeaderComponent,
+    CreateUserComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +47,8 @@ import { AuthErrorinterceptor } from './auth/auth-error-interceptor';
     AppRoutingModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthTokenHttpInterceptor, multi: true },
+    //{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthErrorinterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

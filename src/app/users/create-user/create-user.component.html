@@ -1,0 +1,54 @@
+<p>
+  <button type="button"
+          class="btn btn-outline-primary"
+          (click)="collapse.toggle()"
+          [attr.aria-expanded]="!isCollapsed"
+          aria-controls="collapseExample">
+    <span *ngIf="isCollapsed">Create worker</span>&nbsp;
+    <i [ngClass]="isCollapsed ? 'bi bi-caret-down-fill' : 'bi bi-caret-up-fill'"></i>
+  </button>
+</p>
+<div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+  <div class="card">
+    <div class="card-body">
+      <h2>Create a new worker</h2>
+      <form #createUserForm="ngForm"
+            (ngSubmit)="onCreateUser(createUserForm)">
+        <div class="form-group">
+          <label for="inputName">Name</label>
+          <input class="form-control"
+                 id="inputName"
+                 placeholder="Enter worker name"
+                 name="name"
+                 ngModel
+                 required>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail">Email address</label>
+          <input class="form-control"
+                 id="inputEmail"
+                 aria-describedby="emailHelp"
+                 placeholder="Enter email"
+                 name="email"
+                 ngModel
+                 required
+                 email>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword">Password</label>
+          <input type="password"
+                 class="form-control"
+                 id="inputPassword"
+                 placeholder="Enter password"
+                 name="password"
+                 ngModel
+                 required
+                 minlength="6">
+        </div>
+
+        <button class="d-block mt-3 btn btn-primary">Create</button>
+      </form>
+    </div>
+  </div>
+</div>
+

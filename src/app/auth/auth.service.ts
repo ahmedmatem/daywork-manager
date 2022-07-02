@@ -19,7 +19,8 @@ export class AuthService {
   user = new BehaviorSubject<User | null>(null)
   private tokenExpirationTimer: any
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient,
+    private router: Router) { }
 
   login(email: string, password: string) {
     const url = SIGN_IN_ENDPOINT

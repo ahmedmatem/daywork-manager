@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Worker } from '../models/Worker'
 import { WorkerApiService } from '../data/remote-storage/worker-api.service'
 import { NgbAccordionConfig } from '@ng-bootstrap/ng-bootstrap'
