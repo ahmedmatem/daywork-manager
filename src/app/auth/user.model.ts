@@ -1,3 +1,5 @@
+import { Role } from "../models/Role"
+
 export class User {
   constructor(
     public email: string,
@@ -12,5 +14,14 @@ export class User {
     }
 
     return this._token
+  }
+
+  get role() {
+    // extract role from JWT token data
+    let jwtData = this._token.split('.')[1]
+    let decodedJwtJsonData = window.atob(jwtData)
+    let decodedJwtData = JSON.parse(decodedJwtJsonData)
+
+    return decodedJwtData.role
   }
 }

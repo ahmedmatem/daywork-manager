@@ -28,4 +28,17 @@ export class UserService {
           return result.user
         }))
   }
+
+  get users$(): Observable<User[]> {
+    return this.http.get<{ users: User[] }>(this.baseUrl)
+      .pipe(
+        map((result: { users: User[] }) => {
+          return result.users
+        })
+      )
+  }
+
+  edit(user: UpdateUserRequest) {
+    return this.http.patch(`${this.baseUrl}/${user.uid}`, user)
+  }
 }

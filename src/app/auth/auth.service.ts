@@ -32,7 +32,12 @@ export class AuthService {
     return this.http.post<AuthResponseData>(url, body)
       .pipe(
         tap(resData => {
-          this.handleAuthentication(email, resData.localid, resData.idToken, +resData.expiresIn)
+          this.handleAuthentication(
+            email,
+            resData.localid,
+            resData.idToken,
+            +resData.expiresIn
+          )
         }),
         catchError(errResponse => {
           return this.handleError(errResponse)
@@ -47,7 +52,8 @@ export class AuthService {
       email: string,
       id: string,
       _token: string,
-      _tokenExpirationDate: string
+      _tokenExpirationDate: string,
+      _role: string
     } = JSON.parse(userData)
 
     const loadedUser = new User(
@@ -94,6 +100,7 @@ export class AuthService {
     const user = new User(email, userId, token, expirationDate)
     this.user.next(user)
     this.autoLogout(expiresIn * 1000)
+    console.log('User role: ' + user.role)
     localStorage.setItem('userData', JSON.stringify(user))
   }
 
