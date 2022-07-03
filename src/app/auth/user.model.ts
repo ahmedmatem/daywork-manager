@@ -1,5 +1,3 @@
-import { Role } from "../models/Role"
-
 export class User {
   constructor(
     public email: string,

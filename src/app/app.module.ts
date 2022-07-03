@@ -22,6 +22,7 @@ import { AdminHeaderComponent } from './admin/admin-header/admin-header.componen
 import { AuthErrorinterceptor } from './auth/auth-error-interceptor';
 import { CreateUserComponent } from './users/create-user/create-user.component';
 import { AuthTokenHttpInterceptor } from './auth/auth-token.interceptor';
+import { UserHeaderComponent } from './header/user-header/user-header.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { AuthTokenHttpInterceptor } from './auth/auth-token.interceptor';
     NumberPickerComponent,
     AdminComponent,
     AdminHeaderComponent,
-    CreateUserComponent
+    CreateUserComponent,
+    UserHeaderComponent
   ],
   imports: [
     BrowserModule,
