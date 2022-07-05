@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Role } from '../../models/Role';
 import { UserService } from '../user.service';
+import { Worker } from '../../models/Worker'
 
 @Component({
   selector: 'app-create-user',
@@ -24,7 +25,8 @@ export class CreateUserComponent implements OnInit {
       displayName: name,
       email: email,
       password: password,
-      role: Role.User
+      role: Role.User,
+      userData: new Worker(name)
     }).subscribe(
       response => {
         console.log(response)

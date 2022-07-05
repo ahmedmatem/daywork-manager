@@ -34,6 +34,10 @@ export class WorkerApiService {
     return this.http.put<Worker>(DB_URL + WORKERS + '/' + worker.id + '.json', worker)
   }
 
+  getWorkerById(uid: string) {
+
+  }
+
   fetchWorkers(): Observable<Worker[]> {
     return this.http.get<Worker[]>(DB_URL + WORKERS_JSON)
       .pipe(map(responseData => {

@@ -14,7 +14,7 @@ import { DayworkApiService } from './remote-storage/daywork-api.service'
 })
 export class WorkerRepositoryService {
 
-  private workers: Worker[]
+  private _workers: Worker[]
   private dayworks = {} as IDictionary<Daywork[]>
 
   onWorkersChanged = new Subject<Worker[]>()
@@ -29,18 +29,18 @@ export class WorkerRepositoryService {
     private dayworlLocalStoirage: DayworkLocalstorageService) {
 
     // Try loading workers from local storage
-    this.workers = this.workerLocalStorage.getWorkers()
-    if (this.workers.length === 0) {
+    this._workers = this.workerLocalStorage.getWorkers()
+    if (this._workers.length === 0) {
       // In case of no workers saved in local storage request workers from remote storage
       this.workerApiService.fetchWorkers().subscribe(workers => {
-          this.workers = workers
-          this.onWorkersChanged.next(this.workers.slice())
+          this._workers = workers
+          this.onWorkersChanged.next(this._workers.slice())
         })
     }
   }
 
-  getWorkers() {
-    return this.workers.slice()
+  get workers() {
+    return this._workers.slice()
   }
 
   /**
@@ -51,7 +51,7 @@ export class WorkerRepositoryService {
   workersDayworksFromLocalStorage(dateRange: DateRange)
     : { workerId: string, dayworks: Daywork[] }[] {
     const result: {workerId: string, dayworks: Daywork[]}[] = []
-    this.workers?.forEach(worker => {
+    this._workers?.forEach(worker => {
       result.push({
         workerId: worker.id,
         dayworks: this.dayworlLocalStoirage.getDayworks(worker.id, dateRange)
@@ -105,9 +105,9 @@ export class WorkerRepositoryService {
           this.workerLocalStorage.save(worker)
 
           // Add worker in local workers array
-          this.workers.push(worker)
+          this._workers.push(worker)
           // Send workers changed event to observers
-          this.onWorkersChanged.next(this.workers.slice())
+          this.onWorkersChanged.next(this._workers.slice())
         },
         error => {
           this.onErrorOcurred.next(':( No internet connection. Check your connection and try again.')
@@ -122,8 +122,8 @@ export class WorkerRepositoryService {
     this.workerApiService.fetchWorkers()
       .subscribe(
         workers => {
-          this.workers = workers
-          this.onWorkersChanged.next(this.workers)
+          this._workers = workers
+          this.onWorkersChanged.next(this._workers)
           this.workerLocalStorage.save(...workers)
         },
         error => {
@@ -138,7 +138,7 @@ export class WorkerRepositoryService {
   }
 
   toogleDayTracking(worker: Worker, dayIndex: number) {
-    const workerInWorkers = this.workers.find((w) => w === worker)
+    const workerInWorkers = this._workers.find((w) => w === worker)
     workerInWorkers!.trackingDays[dayIndex].tracked =
       !workerInWorkers?.trackingDays[dayIndex].tracked
 
@@ -147,7 +147,7 @@ export class WorkerRepositoryService {
 
   toogleAutoTracking(worker: Worker) {
     // find the worker whos daywork work status changed
-    const workerInWorkers = this.workers.find((w) => w === worker)
+    const workerInWorkers = this._workers.find((w) => w === worker)
     workerInWorkers!.autoTracking = !workerInWorkers?.autoTracking
 
     this.updateWorker(worker)

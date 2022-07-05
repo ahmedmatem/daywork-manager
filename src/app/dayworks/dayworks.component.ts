@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core'
-import { Subject } from 'rxjs'
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { map, Subject, Subscription, take } from 'rxjs'
+import { AuthService } from '../auth/auth.service'
+import { User } from '../auth/user.model'
 import { WorkerRepositoryService } from '../data/worker-repository.service'
 
 import { DateRange } from '../models/DateRange'
 import { Daywork } from '../models/Daywork'
+import { Role } from '../models/Role'
 import { Worker } from '../models/Worker'
 import { IDictionary } from '../share/utils'
 
@@ -12,21 +15,41 @@ import { IDictionary } from '../share/utils'
   templateUrl: './dayworks.component.html',
   styleUrls: ['./dayworks.component.css']
 })
-export class DayworksComponent implements OnInit {
-
+export class DayworksComponent implements OnInit, OnDestroy {
+  user: User | null = null
   dateRange = new DateRange()
   workers: Worker[] | undefined
   //dayworks: { workerId: string, dayworks: Daywork[] }[] = []
   workersDayworks = {} as IDictionary<Daywork[]>
 
-  constructor( private workerRepo: WorkerRepositoryService ) { }
+  onWorkersChangedSub = new Subscription()
+
+  constructor(
+    private workerRepo: WorkerRepositoryService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void {
-    this.workerRepo.onWorkersChanged.subscribe(workers => {
-        this.workers = workers
-    })
+    this.workers = this.workerRepo.workers
+    this.user = this.authService.user.getValue()
+    switch (this.user?.role) {
+      case Role.User:
+        break;
+      case Role.Admin:
+        break
+      default:
+    }
 
-    this.workers = this.workerRepo.getWorkers()
+    this.onWorkersChangedSub =
+      this.workerRepo.onWorkersChanged.subscribe(
+        workers => {
+          this.workers = workers
+        }
+      )
+  }
+
+  ngOnDestroy(): void {
+    this.onWorkersChangedSub.unsubscribe()
   }
 
   onPrevDateRange() {

@@ -29,7 +29,7 @@ export class WorkersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.workers = this.workerRepository.getWorkers()
+    this.workers = this.workerRepository.workers
 
     // If no worker exists try to fetch them from remote server
     if (this.workers.length === 0) {

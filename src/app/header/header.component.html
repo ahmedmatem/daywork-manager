@@ -8,7 +8,8 @@
          id="navbarSupportedContent"
          [ngSwitch]="role">
 
-      <app-user-header *ngSwitchCase="'User'"></app-user-header>
+      <app-user-header *ngSwitchCase="'user'"></app-user-header>
+      <app-admin-header *ngSwitchCase="'admin'"></app-admin-header>
 
       <ul class="navbar-nav w-100 justify-content-end">
         <li class="nav-item" *ngIf="!isAuthenticated">

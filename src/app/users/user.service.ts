@@ -2,12 +2,14 @@ import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { map, Observable } from "rxjs"
 import { User } from "../auth/user.model"
+import { Worker } from "../models/Worker"
 
 export type CreateUserRequest = {
   displayName: string,
   password: string,
   email: string,
-  role: string
+  role: string,
+  userData: Worker
 }
 export type UpdateUserRequest = { uid: string } & CreateUserRequest
 

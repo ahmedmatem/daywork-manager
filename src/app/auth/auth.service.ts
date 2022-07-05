@@ -30,7 +30,8 @@ export class AuthService {
       returnSecureToken: true
     }
     return this.http.post<AuthResponseData>(url, body).pipe(
-        tap(resData => {
+      tap(resData => {
+        console.log(resData)
           this.handleAuthentication(email,  resData.localid, resData.idToken, +resData.expiresIn)
         }),
         catchError(errResponse => {
