@@ -41,7 +41,7 @@ export class DayworksComponent implements OnInit, OnDestroy {
     }
 
     this.onWorkersChangedSub =
-      this.workerRepo.onWorkersChanged.subscribe(
+      this.workerRepo.onFetchWorkers.subscribe(
         workers => {
           this.workers = workers
         }

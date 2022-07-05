@@ -8,6 +8,10 @@ declare global {
   interface DateConstructor {
     
   }
+
+  interface String {
+    toDate(dateAsString: string): Date
+  }
 }
 
 /**

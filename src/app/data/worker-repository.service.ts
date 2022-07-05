@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Subject } from 'rxjs'
+import { Subject, Subscription } from 'rxjs'
 import { WorkerApiService } from '../data/remote-storage/worker-api.service'
 import { DateRange } from '../models/DateRange'
 import { Daywork } from '../models/Daywork'
@@ -14,13 +14,15 @@ import { DayworkApiService } from './remote-storage/daywork-api.service'
 })
 export class WorkerRepositoryService {
 
-  private _workers: Worker[]
+  onError = new Subject<string>()
+  onSyncFail = new Subject<void>()
+  onFetchWorkers = new Subject<Worker[]>()
+  onDayworksChanged = new Subject<IDictionary<Daywork[]>>()
+
+  private _workers: Worker[] = []
   private dayworks = {} as IDictionary<Daywork[]>
 
-  onWorkersChanged = new Subject<Worker[]>()
-  onErrorOcurred = new Subject<string>()
-  onSyncFail = new Subject<void>()
-  onDayworksChanged = new Subject<IDictionary<Daywork[]>>()
+  private workersSub = new Subscription()
 
   constructor(
     private workerApiService: WorkerApiService,
@@ -29,14 +31,20 @@ export class WorkerRepositoryService {
     private dayworlLocalStoirage: DayworkLocalstorageService) {
 
     // Try loading workers from local storage
-    this._workers = this.workerLocalStorage.getWorkers()
-    if (this._workers.length === 0) {
-      // In case of no workers saved in local storage request workers from remote storage
-      this.workerApiService.fetchWorkers().subscribe(workers => {
-          this._workers = workers
-          this.onWorkersChanged.next(this._workers.slice())
-        })
-    }
+    //this._workers = this.workerLocalStorage.getWorkers()
+    //if (this._workers.length === 0) {
+    //  // In case of no workers saved in local storage request workers from remote storage
+    //  this.workerApiService.fetchWorkers().subscribe(workers => {
+    //      this._workers = workers
+    //      this.onWorkersChanged.next(this._workers.slice())
+    //    })
+    //}
+
+    //this.workerApiService.fetchWorkers().subscribe(
+    //    workers => {
+    //      this._workers = workers
+    //    })
+    this.fetchWorkers()
   }
 
   get workers() {
@@ -107,10 +115,10 @@ export class WorkerRepositoryService {
           // Add worker in local workers array
           this._workers.push(worker)
           // Send workers changed event to observers
-          this.onWorkersChanged.next(this._workers.slice())
+          this.onFetchWorkers.next(this._workers.slice())
         },
         error => {
-          this.onErrorOcurred.next(':( No internet connection. Check your connection and try again.')
+          this.onError.next(':( No internet connection. Check your connection and try again.')
         })
   }
   /**
@@ -123,16 +131,16 @@ export class WorkerRepositoryService {
       .subscribe(
         workers => {
           this._workers = workers
-          this.onWorkersChanged.next(this._workers)
+          this.onFetchWorkers.next(this._workers)
           this.workerLocalStorage.save(...workers)
         },
         error => {
           switch (error.name) {
             case 'HttpErrorResponse':
-              this.onErrorOcurred.next("No internet connection! :( Try again later.")
+              this.onError.next("No internet connection! :( Try again later.")
               break
             default:
-              this.onErrorOcurred.next("Undefined error ocurred!")
+              this.onError.next("Undefined error ocurred!")
           }
         })
   }
