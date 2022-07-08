@@ -40,7 +40,7 @@ export class WorkersComponent implements OnInit, OnDestroy {
     //  /*this.workerRepository.fetchWorkers()*/
     //}
     this.loading = true // start spinner
-    //this.workerRepository.fetchWorkers()
+    this.workerRepository.fetchWorkers()
 
     // Subscribe onErrorOcurred event
     //this.workerRepository.onErrorOcurred.subscribe(errMessage => {
