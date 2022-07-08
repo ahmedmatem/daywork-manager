@@ -57,6 +57,7 @@ export class WorkerApiService {
       `${environment.apiBaseUrl}/${WORKERS_END_POINT}`
     ).pipe(
       map(resData => {
+        console.log(resData)
         const workers: Worker[] = []
         for (let key in resData) {
           // set registeredOn from millis

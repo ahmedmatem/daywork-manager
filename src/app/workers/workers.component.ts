@@ -17,7 +17,7 @@ export class WorkersComponent implements OnInit, OnDestroy {
   workerName = ''
   //onWorkerExistsErr = new Subject<string>()
 
-  loading = false
+  isLoading = false
 
   private onFetchWorkersSub = new Subscription
 
@@ -39,7 +39,7 @@ export class WorkersComponent implements OnInit, OnDestroy {
     //  // That will trigger onWorkersChanged event.
     //  /*this.workerRepository.fetchWorkers()*/
     //}
-    this.loading = true // start spinner
+    this.isLoading = true // start spinner
     this.workerRepository.fetchWorkers()
 
     // Subscribe onErrorOcurred event
@@ -52,12 +52,20 @@ export class WorkersComponent implements OnInit, OnDestroy {
     this.onFetchWorkersSub =
       this.workerRepository.onFetchWorkers.subscribe(
         (workers: Worker[]) => {
-          this.loading = false // stop spinner
+          this.isLoading = false // stop spinner
           this.workers = workers
         })
 
     //this.onWorkerExistsErr
     //  .subscribe(errMsg => { this.errorMessage = errMsg })
+  }
+
+  onEdit(id: string) {
+
+  }
+
+  onDelete(id: string) {
+
   }
 
   ngOnDestroy(): void {

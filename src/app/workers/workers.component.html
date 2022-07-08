@@ -24,25 +24,28 @@
   <!-- Error alert -->
   <ngb-alert *ngIf="errorMessage">{{ errorMessage }}</ngb-alert>
 
-  <div *ngIf="loading" class="text-center">
-    <div *ngIf="loading" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+  <div *ngIf="isLoading" class="text-center">
+    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
   </div>
 
   <!-- List of workers -->
   <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
     <ngb-panel *ngFor="let worker of workers">
       <ng-template ngbPanelHeader let-opened="opened">
-        <div class="accordion-button custom-header justify-content-between" [class.collapsed]="!opened">
+        <div class="accordion-button custom-header justify-content-between"
+             [class.collapsed]="!opened">
           <p class="m-0">{{worker.name}}</p>
           <div>
             <button type="button"
                     title="Edit"
-                    class="btn btn-sm btn-outline-secondary ms-2">
+                    class="btn btn-sm btn-outline-secondary ms-2"
+                    (click)="onEdit('{{worker.id}}')">
               <i class="bi bi-pencil"></i>
             </button>
             <button type="button"
                     title="Delete"
-                    class="btn btn-sm btn-outline-danger ms-2">
+                    class="btn btn-sm btn-outline-danger ms-2"
+                    (click)="onDelete('{{worker.id}}')">
               <i class="bi bi-trash"></i>
             </button>
             <button ngbPanelToggle

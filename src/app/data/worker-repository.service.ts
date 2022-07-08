@@ -44,7 +44,7 @@ export class WorkerRepositoryService {
     //    workers => {
     //      this._workers = workers
     //    })
-    this.fetchWorkers()
+    //this.fetchWorkers()
   }
 
   get workers() {
