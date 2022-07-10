@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Worker } from '../models/Worker'
 import { WorkerApiService } from '../data/remote-storage/worker-api.service'
-import { NgbAccordionConfig } from '@ng-bootstrap/ng-bootstrap'
+import { ModalDismissReasons, NgbAccordionConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { WorkerRepositoryService } from '../data/worker-repository.service'
 import { Subject, Subscription } from 'rxjs'
+import { AuthService } from '../auth/auth.service'
 
 @Component({
   selector: 'app-workers',
@@ -15,18 +16,25 @@ export class WorkersComponent implements OnInit, OnDestroy {
   errorMessage?: string
   workers: Worker[] = []
   workerName = ''
+  role: string
   //onWorkerExistsErr = new Subject<string>()
+
+  modalCloseResult = ''
 
   isLoading = false
 
   private onFetchWorkersSub = new Subscription
 
   constructor(
+    private authService: AuthService,
     private workerApiService: WorkerApiService,
     ngbAccordionConfig: NgbAccordionConfig,
+    private modalService: NgbModal,
     private workerRepository: WorkerRepositoryService) {    
     //ngbAccordionConfig.closeOthers = true
     ngbAccordionConfig.type = 'light'
+
+    this.role = authService.user.value?.role
   }
 
   ngOnInit(): void {
@@ -60,12 +68,12 @@ export class WorkersComponent implements OnInit, OnDestroy {
     //  .subscribe(errMsg => { this.errorMessage = errMsg })
   }
 
-  onEdit(id: string) {
-
-  }
-
-  onDelete(id: string) {
-
+  openModal(content: any) {
+    this.modalService.open(content, { centered: true, ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.modalCloseResult = `Closed with: ${result}`
+    }, (reason) => {
+      this.modalCloseResult = `Dismissed ${this.getDismissReason(reason)}`
+    })
   }
 
   ngOnDestroy(): void {
@@ -98,4 +106,14 @@ export class WorkersComponent implements OnInit, OnDestroy {
   //private workerExists(): boolean {
   //  return this.workers.some(w => w.name === this.workerName )
   //}
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC'
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop'
+    } else {
+      return `with: ${reason}`
+    }
+  }
 }

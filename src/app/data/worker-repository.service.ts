@@ -127,14 +127,15 @@ export class WorkerRepositoryService {
    * workers emitting onWorkersChanged event.
    * */
   fetchWorkers() {
+    this._workers = [] // set empty workers list
     this.workerApiService.fetchWorkers()
-      .subscribe(
-        workers => {
+      .subscribe({
+        next: (workers) => {
           this._workers = workers
-          this.onFetchWorkers.next(this._workers)
+          this.onFetchWorkers.next(this.workers)
           this.workerLocalStorage.save(...workers)
         },
-        error => {
+        error: error => {
           switch (error.name) {
             case 'HttpErrorResponse':
               this.onError.next("No internet connection! :( Try again later.")
@@ -142,22 +143,26 @@ export class WorkerRepositoryService {
             default:
               this.onError.next("Undefined error ocurred!")
           }
-        })
+        }
+      })
+  }
+
+  fetchWorker(id: string) {
+    this._workers = [] // set empty workers list
+    this.workerApiService.fetchWorker(id)
+      .subscribe(
+        worker => {
+          this._workers.push(worker)
+          this.onFetchWorkers.next(this.workers)
+        }
+      )
   }
 
   toogleDayTracking(worker: Worker, dayIndex: number) {
-    const workerInWorkers = this._workers.find((w) => w === worker)
-    workerInWorkers!.trackingDays[dayIndex].tracked =
-      !workerInWorkers?.trackingDays[dayIndex].tracked
-
     this.updateWorker(worker)
   }
 
   toogleAutoTracking(worker: Worker) {
-    // find the worker whos daywork work status changed
-    const workerInWorkers = this._workers.find((w) => w === worker)
-    workerInWorkers!.autoTracking = !workerInWorkers?.autoTracking
-
     this.updateWorker(worker)
   }
 
@@ -181,15 +186,16 @@ export class WorkerRepositoryService {
   private updateWorker(worker: Worker) {
     worker.isSyncRequired = false
     this.workerApiService.updateWorker(worker)
-      .subscribe(
-        response => {
+      .subscribe({
+        next: response => {
           this.workerLocalStorage.save(worker)
         },
-        error => {
-          // If update on remote maschine fail et syncronization property
+        error: error => {
+          // If update on remote maschine fail set syncronization property
           worker.isSyncRequired = true
           this.workerLocalStorage.save(worker)
-        })
+        }
+      })
   }
 
 }

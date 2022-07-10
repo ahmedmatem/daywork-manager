@@ -24,18 +24,27 @@ export class DayworksComponent implements OnInit, OnDestroy {
 
   onWorkersChangedSub = new Subscription()
 
+  isLoading = false
+
   constructor(
     private workerRepo: WorkerRepositoryService,
     private authService: AuthService
   ) { }
 
   ngOnInit(): void {
-    this.workers = this.workerRepo.workers
     this.user = this.authService.user.getValue()
+
+    this.workers = []
+
+    this.isLoading = true
+
     switch (this.user?.role) {
       case Role.User:
-        break;
+        this.workerRepo.fetchWorker(this.user.id)
+        break
+      case Role.Manager:
       case Role.Admin:
+        this.workerRepo.fetchWorkers()
         break
       default:
     }
@@ -43,6 +52,7 @@ export class DayworksComponent implements OnInit, OnDestroy {
     this.onWorkersChangedSub =
       this.workerRepo.onFetchWorkers.subscribe(
         workers => {
+          this.isLoading = false
           this.workers = workers
         }
       )

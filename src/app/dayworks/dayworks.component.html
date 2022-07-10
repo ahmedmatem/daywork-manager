@@ -1,12 +1,12 @@
 <div class="container">
 
-  <h2>Workers Dayworks</h2>
+  <h2>Worker<span *ngIf="user?.role === 'admin'">s</span> Dayworks</h2>
 
   <div class="row justify-content-start text-responsive">
     <div class="col col-auto" (click)="onPrevDateRange()">
       <!--<button class="btn btn-sm btn-link" (click)="onPrevDateRange()">
-    <i class="bi bi-chevron-left"></i>
-  </button>-->
+        <i class="bi bi-chevron-left"></i>
+      </button>-->
       <i class="bi bi-chevron-left"></i>
     </div>
     <div class="col col-auto">
@@ -14,24 +14,28 @@
     </div>
     <div class="col col-auto" [ngClass]="{'d-none': !hasNextDateRange()}" (click)="onNextDateRange()">
       <!--<button class="btn btn-sm btn-link" (click)="onNextDateRange()"
-          [disabled]="!hasNextDateRange()">
-    <i class="bi bi-chevron-right"></i>
-  </button>-->
+              [disabled]="!hasNextDateRange()">
+        <i class="bi bi-chevron-right"></i>
+      </button>-->
       <i class="bi bi-chevron-right"></i>
     </div>
   </div>
 
   <br />
 
+  <!-- Loading spinner -->
+  <div class="text-center" *ngIf="isLoading">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
   <!-- List of workers -->
   <ngb-accordion type="light" #acc="ngbAccordion" activeIds="ngb-panel-0">
     <ngb-panel *ngFor="let worker of workers" title="{{ worker.name }}">
       <ng-template ngbPanelContent>
 
-        <app-worker-dayworks
-          [worker]="worker"
-          [dateRange]="dateRange"
-          [dayworks]="workersDayworks[worker.id]">
+        <app-worker-dayworks [worker]="worker"
+                             [dateRange]="dateRange"
+                             [dayworks]="workersDayworks[worker.id]">
 
         </app-worker-dayworks>
 

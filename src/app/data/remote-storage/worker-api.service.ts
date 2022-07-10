@@ -32,11 +32,17 @@ export class WorkerApiService {
   }
 
   updateWorker(worker: Worker): Observable<any> {
-    return this.http.put<Worker>(DB_URL + WORKERS_END_POINT + '/' + worker.id + '.json', worker)
+    return this.http.patch(
+      `${environment.apiBaseUrl}/${WORKERS_END_POINT}/${worker.id}`,
+      { worker: worker }
+    )
+    //return this.http.put<Worker>(DB_URL + WORKERS_END_POINT + '/' + worker.id + '.json', worker)
   }
 
-  getWorkerById(uid: string) {
-
+  fetchWorker(id: string): Observable<Worker> {
+    return this.http.get<Worker>(
+      `${environment.apiBaseUrl}/${WORKERS_END_POINT}/${id}`
+    )
   }
 
   fetchWorkers(): Observable<Worker[]> {
@@ -57,7 +63,6 @@ export class WorkerApiService {
       `${environment.apiBaseUrl}/${WORKERS_END_POINT}`
     ).pipe(
       map(resData => {
-        console.log(resData)
         const workers: Worker[] = []
         for (let key in resData) {
           // set registeredOn from millis

@@ -24,11 +24,13 @@ export class WorkerDetailComponent implements OnInit {
   }
 
   toogleDayTracking(dayIndex: number) {
+    this.worker.trackingDays[dayIndex].tracked = !this.worker.trackingDays[dayIndex].tracked 
     this.workerRepository.toogleDayTracking(this.worker, dayIndex)
   }
 
   toogleAutoTracking() {
     this.autoTracking = !this.autoTracking
+    this.worker.autoTracking = this.autoTracking
     this.workerRepository.toogleAutoTracking(this.worker)
   }
 

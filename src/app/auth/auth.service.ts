@@ -10,7 +10,7 @@ interface AuthResponseData {
   email: string,
   refreshToken: string,
   expiresIn: string,
-  localid: string,
+  localId: string,
   registered: boolean
 }
 
@@ -31,8 +31,7 @@ export class AuthService {
     }
     return this.http.post<AuthResponseData>(url, body).pipe(
       tap(resData => {
-        console.log(resData)
-          this.handleAuthentication(email,  resData.localid, resData.idToken, +resData.expiresIn)
+          this.handleAuthentication(email, resData.localId, resData.idToken, +resData.expiresIn)
         }),
         catchError(errResponse => {
           return this.handleError(errResponse)

@@ -12,12 +12,11 @@
   <button type="button"
           class="btn btn-sm text-responsive"
           [disabled]="!autoTracking"
-          [ngClass]="{'btn-success': trackingDay.tracked, 'btn-danger': !trackingDay.tracked}"
+          [ngClass]="trackingDay.tracked ? 'btn-success' : 'btn-danger'"
           (click)="toogleDayTracking(dayIndex)"
-          *ngFor="let trackingDay of worker.trackingDays; let dayIndex = index">
+          *ngFor="let trackingDay of worker.trackingDays let dayIndex = index">
     {{trackingDay.day}}
-    <i *ngIf="trackingDay.tracked" class="bi bi-check"></i>
-    <i *ngIf="!trackingDay.tracked" class="bi bi-x"></i>
+    <i [ngClass]="trackingDay.tracked ? 'bi bi-check' : 'bi bi-x'"></i>
   </button>
 </div>
 
