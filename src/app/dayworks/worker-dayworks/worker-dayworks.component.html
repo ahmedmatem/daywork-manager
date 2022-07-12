@@ -30,7 +30,10 @@
         </td>
       </tr>
       <tr>
-        <td [ngbPopover]="popContent" #popOver="ngbPopover" [popoverTitle]="popTitle" triggers="dblclick"
+        <td [ngbPopover]="popContent"
+            #popOver="ngbPopover"
+            [popoverTitle]="popTitle"
+            triggers="dblclick"
             class="text-center pt-0"
             [ngClass]="{'bg-warning': dateRange.isTodayInRange() && dateRange.days()[7+dayIndex] === dateRange.today.getDate()}"
             *ngFor="let dw of dayworks?.slice(7,14) let dayIndex=index"

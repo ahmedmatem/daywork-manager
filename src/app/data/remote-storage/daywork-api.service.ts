@@ -73,17 +73,17 @@ export class DayworkApiService {
       )
   }
 
-  getDayworks(dateRange: DateRange): Observable<IDictionary<Daywork[]>> {
-    const result = {} as IDictionary<Daywork[]>
-    const url = `${DB_URL}${KEY_DAYWORKS}/${dateRange.toString()}.json`
-    return this.http.get<Daywork[][]>(url)
-      .pipe(
-        map(responseData => {
-          const dayworks: Daywork[] = []
-          for (const key in responseData) {
-            result[key] = responseData[key]
-          }
-          return result
-        }))
-  }
+  //getDayworks(dateRange: DateRange): Observable<IDictionary<Daywork[]>> {
+  //  const result = {} as IDictionary<Daywork[]>
+  //  const url = `${DB_URL}${KEY_DAYWORKS}/${dateRange.toString()}.json`
+  //  return this.http.get<Daywork[][]>(url)
+  //    .pipe(
+  //      map(responseData => {
+  //        const dayworks: Daywork[] = []
+  //        for (const key in responseData) {
+  //          result[key] = responseData[key]
+  //        }
+  //        return result
+  //      }))
+  //}
 }

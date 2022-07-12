@@ -54,10 +54,6 @@ export class DayworksComponent implements OnInit, OnDestroy {
         workers => {
           this.isLoading = false
           this.workers = workers
-          //workers?.forEach(w => {
-          //  console.log(`WorkerId: ${w.id}; for date range: ${this.dateRange}`)
-          //  this.workerRepo.getWorkerDayworks(w.id, this.dateRange)
-          //})
         }
       )
   }
@@ -69,22 +65,19 @@ export class DayworksComponent implements OnInit, OnDestroy {
   onPrevDateRange() {
     this.dateRange.setPrev()
     // Reload dayworks for new dateRange
-    this.workerRepo.workersDayworksFromRemoteDb(this.dateRange)
+    //this.workerRepo.workersDayworksFromRemoteDb(this.dateRange)
+    this.workerRepo.getWorkerDayworks(this.user?.id!, this.dateRange)
   }
 
   onNextDateRange() {
     this.dateRange.setNext()
     // Reload dayworks for new dateRange
-    this.workerRepo.workersDayworksFromRemoteDb(this.dateRange)
+    //this.workerRepo.workersDayworksFromRemoteDb(this.dateRange)
+    this.workerRepo.getWorkerDayworks(this.user?.id!, this.dateRange)
   }
 
   hasNextDateRange(): boolean {
     const today = new Date()
     return this.dateRange.startDate.getTime() < today.getTime()
   }
-
-  //getWorkerDayworks(worker: Worker): Daywork[] | undefined {
-  //  return this.workersDayworks[worker.id]
-  //  //return this.dayworks.find(d => d.workerId === worker.id)?.dayworks
-  //}
 }

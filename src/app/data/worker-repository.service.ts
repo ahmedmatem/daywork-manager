@@ -20,7 +20,7 @@ export class WorkerRepositoryService {
   onDayworksChanged = new Subject<IDictionary<Daywork[]>>()
 
   private _workers: Worker[] = []
-  private dayworks = {} as IDictionary<Daywork[]>
+  //private dayworks = {} as IDictionary<Daywork[]>
 
   private workersSub = new Subscription()
 
@@ -74,14 +74,14 @@ export class WorkerRepositoryService {
    * @param dateRange
    */
 
-  workersDayworksFromRemoteDb(dateRange: DateRange) {
-    //const result: { workerId: string, dayworks: Daywork[] }[] = []
-    this.dayworkApiService.getDayworks(dateRange)
-      .subscribe(dayworks => {
-        this.dayworks = dayworks
-        this.onDayworksChanged.next(this.dayworks)
-      })
-  }
+  //workersDayworksFromRemoteDb(dateRange: DateRange) {
+  //  //const result: { workerId: string, dayworks: Daywork[] }[] = []
+  //  this.dayworkApiService.getDayworks(dateRange)
+  //    .subscribe(dayworks => {
+  //      //this.dayworks = dayworks
+  //      this.onDayworksChanged.next(dayworks)
+  //    })
+  //}
 
   getWorkerDayworks(workerId: string, dateRange: DateRange) {
     this.dayworkApiService.getWorkerDayworks(workerId, dateRange)
