@@ -83,6 +83,15 @@ export class WorkerRepositoryService {
       })
   }
 
+  getWorkerDayworks(workerId: string, dateRange: DateRange) {
+    this.dayworkApiService.getWorkerDayworks(workerId, dateRange)
+      .subscribe(
+        dws => {
+          this.onDayworksChanged.next(dws)
+        }
+      )
+  }
+
   /**
    * Save workers dayworks in both local storage and remote database.
    * 
@@ -91,9 +100,11 @@ export class WorkerRepositoryService {
    */
 
   saveDayworks(
+    id: string,
     dateRange: DateRange,
-    ...workersDayworks: { workerId: string, dayworks: Daywork[] }[]) {
-    this.dayworkApiService.save(dateRange, ...workersDayworks)
+    ...workersDayworks: { workerId: string, dayworks: Daywork[] }[]
+  ) {
+    this.dayworkApiService.save(id, dateRange, ...workersDayworks)
     this.dayworlLocalStoirage.save(dateRange, ...workersDayworks)
   }
 

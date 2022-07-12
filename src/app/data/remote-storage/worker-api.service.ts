@@ -2,11 +2,10 @@ import { Injectable } from "@angular/core"
 import { HttpClient, HttpResponse } from '@angular/common/http'
 import { Worker } from "../../models/Worker"
 import { map, Observable, Subject } from "rxjs"
-import { DB_URL } from "../../app.config"
+import { DB_URL, WORKERS_END_POINT } from "../../app.config"
 import { environment } from "../../../environments/environment.prod"
 
 //const WORKERS_JSON = 'workers.json'
-const WORKERS_END_POINT = 'workers'
 
 @Injectable({ providedIn: 'root' })
 export class WorkerApiService {

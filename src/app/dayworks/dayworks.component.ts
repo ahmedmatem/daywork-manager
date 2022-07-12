@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
-import { map, Subject, Subscription, take } from 'rxjs'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Subject, Subscription, take } from 'rxjs'
 import { AuthService } from '../auth/auth.service'
 import { User } from '../auth/user.model'
 import { WorkerRepositoryService } from '../data/worker-repository.service'
@@ -22,7 +22,7 @@ export class DayworksComponent implements OnInit, OnDestroy {
   //dayworks: { workerId: string, dayworks: Daywork[] }[] = []
   workersDayworks = {} as IDictionary<Daywork[]>
 
-  onWorkersChangedSub = new Subscription()
+  onWorkersChangedSub = new Subscription
 
   isLoading = false
 
@@ -54,6 +54,10 @@ export class DayworksComponent implements OnInit, OnDestroy {
         workers => {
           this.isLoading = false
           this.workers = workers
+          //workers?.forEach(w => {
+          //  console.log(`WorkerId: ${w.id}; for date range: ${this.dateRange}`)
+          //  this.workerRepo.getWorkerDayworks(w.id, this.dateRange)
+          //})
         }
       )
   }
@@ -79,8 +83,8 @@ export class DayworksComponent implements OnInit, OnDestroy {
     return this.dateRange.startDate.getTime() < today.getTime()
   }
 
-  getWorkerDayworks(worker: Worker): Daywork[] | undefined {
-    return this.workersDayworks[worker.id]
-    //return this.dayworks.find(d => d.workerId === worker.id)?.dayworks
-  }
+  //getWorkerDayworks(worker: Worker): Daywork[] | undefined {
+  //  return this.workersDayworks[worker.id]
+  //  //return this.dayworks.find(d => d.workerId === worker.id)?.dayworks
+  //}
 }

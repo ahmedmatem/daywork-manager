@@ -9,6 +9,8 @@ import { Worker } from '../../models/Worker'
 import { NumberPickerService } from '../../share/number-picker/number-picker.service'
 import { DayworksService } from '../dayworks.service'
 
+const DOUBLE_CLICK_GAP = 250
+
 @Component({
   selector: 'app-worker-dayworks',
   templateUrl: './worker-dayworks.component.html',
@@ -56,7 +58,8 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setDayworks()
-    this.workerRepo.workersDayworksFromRemoteDb(this.dateRange)
+    //this.workerRepo.workersDayworksFromRemoteDb(this.dateRange)
+    this.workerRepo.getWorkerDayworks(this.worker.id, this.dateRange)
 
     this.onDayworksChangedSubscription =
       this.workerRepo.onDayworksChanged.subscribe(wd => {
@@ -113,7 +116,7 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
         // Handle single click
         this.toogleDaywork(dayIndex)
       }
-    }, 250)
+    }, DOUBLE_CLICK_GAP)
   }
 
   onDayworkDoubleClick(dayIndex: number) {
@@ -148,7 +151,11 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   //  this.updateDaywork(dayIndex)
   //}
 
-  private toogleDaywork(dayIndex: number, diffHours: number = 0, toogle: boolean = true) {
+  private toogleDaywork(
+    dayIndex: number,
+    diffHours: number = 0,
+    toogle: boolean = true
+  ) {
     const dw = new Daywork()
     dw.day = this.dayworks[dayIndex].day
     dw.isDefined = true
@@ -161,7 +168,11 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
 
     this.dayworks[dayIndex] = dw
     this.calculateTotalDayworksInRange()
-    this.workerRepo.saveDayworks(this.dateRange, { workerId: this.worker.id, dayworks: this.dayworks })
+    this.workerRepo.saveDayworks(
+      this.worker.id,
+      this.dateRange,
+      { workerId: this.worker.id, dayworks: this.dayworks }
+    )
   }
 
   private setDayworks() {

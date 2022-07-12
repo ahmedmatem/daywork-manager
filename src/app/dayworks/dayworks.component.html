@@ -2,6 +2,8 @@
 
   <h2>Worker<span *ngIf="user?.role === 'admin'">s</span> Dayworks</h2>
 
+  <!-- Date range spinner -->
+
   <div class="row justify-content-start text-responsive">
     <div class="col col-auto" (click)="onPrevDateRange()">
       <!--<button class="btn btn-sm btn-link" (click)="onPrevDateRange()">
@@ -30,7 +32,8 @@
 
   <!-- List of workers -->
   <ngb-accordion type="light" #acc="ngbAccordion" activeIds="ngb-panel-0">
-    <ngb-panel *ngFor="let worker of workers" title="{{ worker.name }}">
+    <ngb-panel *ngFor="let worker of workers"
+               title="{{ worker.name }}">
       <ng-template ngbPanelContent>
 
         <app-worker-dayworks [worker]="worker"
@@ -42,6 +45,7 @@
       </ng-template>
     </ngb-panel>
   </ngb-accordion>
+
 </div>
 
 <ng-template #tt>
