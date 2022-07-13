@@ -3,6 +3,7 @@ import { Subject, Subscription } from 'rxjs'
 import { WorkerApiService } from '../data/remote-storage/worker-api.service'
 import { DateRange } from '../models/DateRange'
 import { Daywork } from '../models/Daywork'
+import { Role } from '../models/Role'
 import { Worker } from '../models/Worker'
 import { IDictionary } from '../share/utils'
 import { DayworkLocalstorageService } from './local-storage/daywork-local-storage.service'
@@ -56,17 +57,17 @@ export class WorkerRepositoryService {
    * in given dateRange from local storage
    * */
 
-  workersDayworksFromLocalStorage(dateRange: DateRange)
-    : { workerId: string, dayworks: Daywork[] }[] {
-    const result: {workerId: string, dayworks: Daywork[]}[] = []
-    this._workers?.forEach(worker => {
-      result.push({
-        workerId: worker.id,
-        dayworks: this.dayworlLocalStoirage.getDayworks(worker.id, dateRange)
-      })
-    })
-    return result
-  }
+  //workersDayworksFromLocalStorage(dateRange: DateRange)
+  //  : { workerId: string, dayworks: Daywork[] }[] {
+  //  const result: {workerId: string, dayworks: Daywork[]}[] = []
+  //  this._workers?.forEach(worker => {
+  //    result.push({
+  //      workerId: worker.id,
+  //      dayworks: this.dayworlLocalStoirage.getDayworks(worker.id, dateRange)
+  //    })
+  //  })
+  //  return result
+  //}
 
   /**
    * This function retrieves dayworks in a given dateRange for
@@ -83,8 +84,17 @@ export class WorkerRepositoryService {
   //    })
   //}
 
-  getWorkerDayworks(workerId: string, dateRange: DateRange) {
-    this.dayworkApiService.getWorkerDayworks(workerId, dateRange)
+  //getAllDayworks(dateRange: DateRange) {
+  //  this.dayworkApiService.getAllDayworks(dateRange)
+  //    .subscribe(dayworks => {
+  //      console.log('Dayworks FROM repository')
+  //      console.log(JSON.stringify(dayworks))
+  //      this.onDayworksChanged.next(dayworks)
+  //    })
+  //}
+
+  getDayworks(dateRange: DateRange, workerId?: string) {
+    this.dayworkApiService.getDayworks(dateRange, workerId)
       .subscribe(
         dws => {
           this.onDayworksChanged.next(dws)

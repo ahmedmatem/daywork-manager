@@ -5,6 +5,7 @@ import { DAYS_IN_DATE_RANGE, DAYWORK_DURATION_IN_HOURS } from '../../app.config'
 import { WorkerRepositoryService } from '../../data/worker-repository.service'
 import { DateRange } from '../../models/DateRange'
 import { Daywork } from '../../models/Daywork'
+import { Role } from '../../models/Role'
 import { Worker } from '../../models/Worker'
 import { NumberPickerService } from '../../share/number-picker/number-picker.service'
 import { DayworksService } from '../dayworks.service'
@@ -21,6 +22,7 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   @Input() dayworks!: Daywork[]
   @Input() dateRange!: DateRange
   @Input() worker!: Worker
+  @Input() role!: string
 
   @ViewChildren('popOver') popovers!: QueryList<NgbPopover>
 
@@ -59,7 +61,8 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.setDayworks()
     //this.workerRepo.workersDayworksFromRemoteDb(this.dateRange)
-    this.workerRepo.getWorkerDayworks(this.worker.id, this.dateRange)
+    //this.workerRepo.getDayworks(this.dateRange, this.worker.id)
+    this.requestDayworksByRole(this.role)
 
     this.onDayworksChangedSubscription =
       this.workerRepo.onDayworksChanged.subscribe(wd => {
@@ -252,6 +255,18 @@ export class WorkerDayworksComponent implements OnInit, OnDestroy {
       return 'by clicking on a backdrop'
     } else {
       return `with: ${reason}`
+    }
+  }
+
+  private requestDayworksByRole(role: string) {
+    switch (role) {
+      case Role.User:
+        this.workerRepo.getDayworks(this.dateRange, this.worker.id)
+        break
+      case Role.Manager:
+      case Role.Admin:
+        this.workerRepo.getDayworks(this.dateRange)
+        break
     }
   }
 }

@@ -8,7 +8,6 @@ import { DateRange } from "../../models/DateRange"
 import { Daywork } from "../../models/Daywork"
 import { IDictionary } from "../../share/utils"
 
-const WORKERS_END_POINT = 'workers'
 const DAYWORKS_END_POINT = 'dayworks'
 
 @Injectable({ providedIn: 'root' })
@@ -40,7 +39,7 @@ export class DayworkApiService {
       //console.log('uid: ' + wd.workerId)
       //console.log('dayworks: ' + (wd.dayworks as Daywork[]))
 
-      const url = `${environment.apiBaseUrl}/${WORKERS_END_POINT}/${id}/${DAYWORKS_END_POINT}/${dateRange.toString()}`
+      const url = `${environment.apiBaseUrl}/${DAYWORKS_END_POINT}/${dateRange.toString()}/${id}`
       const req = this.http.patch(url, { dayworks: wd.dayworks })
       reqs.push(req)
     })
@@ -58,20 +57,63 @@ export class DayworkApiService {
     }
   }
 
-  getWorkerDayworks(
-    id: string,
-    dateRange: DateRange
+  /**
+   * Get dayworks in dateRange. If id parameter is not given
+   * get dayworks for all users, otherwise get dayworks for user
+   * with given id.
+   * 
+   * @param dateRange
+   * @param id - optional parameter
+   */
+  getDayworks(
+    dateRange: DateRange,
+    id?: string
   ): Observable<IDictionary<Daywork[]>> {
     const result: IDictionary<Daywork[]> = {} as IDictionary<Daywork[]>
-    const url = `${environment.apiBaseUrl}/${WORKERS_END_POINT}/${id}/${DAYWORKS_END_POINT}/${dateRange.toString()}`
-    return this.http.get<Daywork[]>(url)
-      .pipe(
-        map(dws => {
-          result[id] = dws
-          return result
-        })
-      )
+    let url =
+      `${environment.apiBaseUrl}/${DAYWORKS_END_POINT}/${dateRange.toString()}/${id}`
+
+    if (id) {
+      return this.http.get<Daywork[]>(url)
+        .pipe(
+          map(resData => {
+            result[id] = resData
+            //console.log('Result: ' + JSON.stringify(result))
+            return result
+          })
+        )
+    } else {
+      return this.http.get<Daywork[][]>(url)
+        .pipe(
+          map(resData => {
+            for (const key in resData) {
+              result[key] = resData[key]
+            }
+            //console.log('Result: ' + JSON.stringify(result))
+            return result
+          })
+        )
+    }    
   }
+
+  //getAllDayworks(dateRange: DateRange): Observable<IDictionary<Daywork[]>> {
+  //  const result = {} as IDictionary<Daywork[]>
+  //  const url = `${environment.apiBaseUrl}/${DAYWORKS_END_POINT}/all/${dateRange.toString()}`
+  //  return this.http.get<Daywork[][]>(url)
+  //    .pipe(
+  //      map(resData => {
+  //        console.log(resData)
+  //        for (const key in resData) {
+  //          console.log(`Key: ${key}`)
+  //          console.log(`ResData: ${resData[key]}`)
+  //          result[key] = resData[key]
+  //        }
+  //        //console.log('All dayworks result')
+  //        //console.log(result)
+  //        return result
+  //      })
+  //    )
+  //}
 
   //getDayworks(dateRange: DateRange): Observable<IDictionary<Daywork[]>> {
   //  const result = {} as IDictionary<Daywork[]>

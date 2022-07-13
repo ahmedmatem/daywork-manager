@@ -34,7 +34,7 @@ export class WorkersComponent implements OnInit, OnDestroy {
     //ngbAccordionConfig.closeOthers = true
     ngbAccordionConfig.type = 'light'
 
-    this.role = authService.user.value?.role
+    this.role = authService.user.value?.role!
   }
 
   ngOnInit(): void {

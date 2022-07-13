@@ -21,6 +21,7 @@ export class DayworksComponent implements OnInit, OnDestroy {
   workers: Worker[] | undefined
   //dayworks: { workerId: string, dayworks: Daywork[] }[] = []
   workersDayworks = {} as IDictionary<Daywork[]>
+  role!: string
 
   onWorkersChangedSub = new Subscription
 
@@ -33,6 +34,7 @@ export class DayworksComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = this.authService.user.getValue()
+    this.role = this.user?.role!
 
     this.workers = []
 
@@ -59,25 +61,39 @@ export class DayworksComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.onWorkersChangedSub.unsubscribe()
+    this.onWorkersChangedSub?.unsubscribe()
   }
 
   onPrevDateRange() {
     this.dateRange.setPrev()
     // Reload dayworks for new dateRange
     //this.workerRepo.workersDayworksFromRemoteDb(this.dateRange)
-    this.workerRepo.getWorkerDayworks(this.user?.id!, this.dateRange)
+    //this.workerRepo.getWorkerDayworks(this.user?.id!, this.dateRange)
+    this.requestDayworksByRole(this.user?.role!)
   }
 
   onNextDateRange() {
     this.dateRange.setNext()
     // Reload dayworks for new dateRange
     //this.workerRepo.workersDayworksFromRemoteDb(this.dateRange)
-    this.workerRepo.getWorkerDayworks(this.user?.id!, this.dateRange)
+    //this.workerRepo.getDayworks(this.dateRange, this.user?.id)
+    this.requestDayworksByRole(this.user?.role!)
   }
 
   hasNextDateRange(): boolean {
     const today = new Date()
     return this.dateRange.startDate.getTime() < today.getTime()
+  }
+
+  private requestDayworksByRole(role: string) {
+    switch (role) {
+      case Role.User:
+        this.workerRepo.getDayworks(this.dateRange, this.user?.id)
+        break
+      case Role.Manager:
+      case Role.Admin:
+        this.workerRepo.getDayworks(this.dateRange)
+        break
+    }
   }
 }

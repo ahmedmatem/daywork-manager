@@ -14,7 +14,7 @@ export class User {
     return this._token
   }
 
-  get role() {
+  get role(): string {
     // extract role from JWT token data
     let jwtData = this._token.split('.')[1]
     let decodedJwtJsonData = window.atob(jwtData)
