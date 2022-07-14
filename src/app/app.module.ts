@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { WorkersComponent } from './workers/workers.component';
 import { NgbModule, NgbTimepickerConfig, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NG_VALIDATORS } from '@angular/forms';
 import { WorkerDetailComponent } from './workers/worker-detail/worker-detail.component';
 import { CreateUserComponent } from './users/create-user/create-user.component';
 import { NumberPickerComponent } from './share/number-picker/number-picker.component';
@@ -25,6 +25,7 @@ import { AdminHeaderComponent } from './admin/admin-header/admin-header.componen
 import { WorkerDayworksComponent } from './dayworks/worker-dayworks/worker-dayworks.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthTokenHttpInterceptor } from './auth/auth-token.interceptor';
+import { ForbiddenNameDirective } from './share/forbidden-name.directive';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { AuthTokenHttpInterceptor } from './auth/auth-token.interceptor';
     UserHeaderComponent,
     AuthComponent,
     AdminComponent,
-    AdminHeaderComponent
+    AdminHeaderComponent,
+    ForbiddenNameDirective
   ],
   imports: [
     BrowserModule,
@@ -55,7 +57,7 @@ import { AuthTokenHttpInterceptor } from './auth/auth-token.interceptor';
     HttpClientModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: AuthTokenHttpInterceptor, multi: true}
+    { provide: HTTP_INTERCEPTORS, useClass: AuthTokenHttpInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

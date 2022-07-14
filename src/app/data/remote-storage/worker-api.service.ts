@@ -4,11 +4,12 @@ import { Worker } from "../../models/Worker"
 import { map, Observable, Subject } from "rxjs"
 import { DB_URL, WORKERS_END_POINT } from "../../app.config"
 import { environment } from "../../../environments/environment.prod"
+import { FetchNamesService } from "../../share/forbidden-name.directive"
 
 //const WORKERS_JSON = 'workers.json'
 
 @Injectable({ providedIn: 'root' })
-export class WorkerApiService {
+export class WorkerApiService implements FetchNamesService {
   //onFetchWorkers = new Subject <Worker[]>()
 
   constructor(private http: HttpClient) {
@@ -73,5 +74,18 @@ export class WorkerApiService {
         return workers
       })
     )
+  }
+
+  isForbiddenName(name: string): Observable<boolean> {
+    return this.http.get<Worker[]>(`${environment.apiBaseUrl}/${WORKERS_END_POINT}`)
+      .pipe(
+        map(resData => {
+          const names: string[] = []
+          for (const key in resData) {
+            names.push(resData[key].name)
+          }
+          return names.includes(name)
+        })
+      )
   }
 }

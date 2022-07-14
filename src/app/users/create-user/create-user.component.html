@@ -15,38 +15,76 @@
       <form #createUserForm="ngForm"
             (ngSubmit)="onCreateUser(createUserForm)">
         <div class="form-group">
-          <label for="inputName">Name</label>
+          <label for="inputName">Name *</label>
           <input class="form-control"
                  id="inputName"
                  placeholder="Enter worker name"
                  name="name"
+                 #name="ngModel"
+                 appForbiddenName
                  ngModel
                  required>
+          <!-- name validation -->
+          <div *ngIf="name.invalid && (name.dirty || name.touched)"
+               class="text-danger mt-1"
+               role="alert">
+            <div *ngIf="name.errors?.['required']">
+              Name is required.
+            </div>
+            <div *ngIf="name.errors?.['forbiddenName']">
+              Name already exists.
+            </div>
+          </div>
         </div>
         <div class="form-group">
-          <label for="inputEmail">Email address</label>
+          <label for="inputEmail">Email address *</label>
           <input class="form-control"
                  id="inputEmail"
                  aria-describedby="emailHelp"
                  placeholder="Enter email"
                  name="email"
+                 #email="ngModel"
                  ngModel
                  required
                  email>
+          <!-- email validation -->
+          <div *ngIf="email.invalid && (email.dirty || email.touched)"
+               class="text-danger mt-1"
+               role="alert">
+            <div *ngIf="email.errors?.['required']">
+              Email is required.
+            </div>
+            <div *ngIf="email.errors?.['email']">
+              Invalid email address.
+            </div>
+          </div>
         </div>
         <div class="form-group">
-          <label for="inputPassword">Password</label>
+          <label for="inputPassword">Password *</label>
           <input type="password"
                  class="form-control"
                  id="inputPassword"
                  placeholder="Enter password"
                  name="password"
+                 #pass="ngModel"
                  ngModel
                  required
                  minlength="6">
+          <!-- pass validation -->
+          <div *ngIf="pass.invalid && (pass.dirty || pass.touched)"
+               class="text-danger mt-1"
+               role="alert">
+            <div *ngIf="pass.errors?.['required']">
+              Password is required.
+            </div>
+            <div *ngIf="pass.errors?.['minlength']">
+              Password must be at least 6 characters long.
+            </div>
+          </div>
         </div>
 
-        <button class="d-block mt-3 btn btn-primary">Create</button>
+        <button class="d-block mt-3 btn btn-primary"
+                [disabled]="createUserForm.invalid">Create</button>
       </form>
     </div>
   </div>

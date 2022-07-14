@@ -1,7 +1,9 @@
 <div class="container">
-  <h2>Workers List</h2>
+  <div class="mt-2">
+    <app-create-user></app-create-user>
+  </div>
 
-  <app-create-user></app-create-user>
+  <h2>Workers List</h2>
 
   <!--<div class="row">
     <div class="col-xs-12 col-md-6">
@@ -25,7 +27,7 @@
   <ngb-alert *ngIf="errorMessage">{{ errorMessage }}</ngb-alert>
 
   <div *ngIf="isLoading" class="text-center">
-    <div *ngIf="isLoading" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
   </div>
 
   <!-- List of workers -->
@@ -35,7 +37,7 @@
         <div class="accordion-button custom-header justify-content-between" [class.collapsed]="!opened">
           <p class="m-0">{{worker.name}}</p>
           <div>
-             <button type="button"
+            <button type="button"
                     title="Manage credentials"
                     (click)="openModal(modalContent)"
                     *ngIf="opened && (role === 'admin' || role === 'manger')"
@@ -47,7 +49,7 @@
                     *ngIf="opened"
                     class="btn btn-sm btn-outline-danger ms-2">
               <i class="bi bi-trash"></i>
-            </button>--> 
+            </button>-->
             <button ngbPanelToggle
                     class="btn btn-sm btn-link ms-2">
               <i [ngClass]="!opened ? 'bi bi-chevron-down' : 'bi bi-chevron-up'"></i>
