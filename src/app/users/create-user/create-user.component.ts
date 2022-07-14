@@ -28,8 +28,8 @@ export class CreateUserComponent implements OnInit {
       role: Role.User,
       userData: new Worker(name)
     }).subscribe(
-      response => {
-        console.log(response)
+      resData => {
+        console.log(resData)
       }
     )
   }

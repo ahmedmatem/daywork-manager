@@ -1,6 +1,8 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { map, Observable } from "rxjs"
+import { environment } from "../../environments/environment"
+import { WORKERS_END_POINT } from "../app.config"
 import { User } from "../auth/user.model"
 import { Worker } from "../models/Worker"
 
