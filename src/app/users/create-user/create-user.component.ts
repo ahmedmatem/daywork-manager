@@ -3,6 +3,8 @@ import { NgForm } from '@angular/forms';
 import { Role } from '../../models/Role';
 import { UserService } from '../user.service';
 import { Worker } from '../../models/Worker'
+import { HttpErrorResponse } from '@angular/common/http';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-create-user',
@@ -10,6 +12,8 @@ import { Worker } from '../../models/Worker'
   styleUrls: ['./create-user.component.css']
 })
 export class CreateUserComponent implements OnInit {
+
+  errMessage: string | null = null
 
   isCollapsed = true
 
@@ -28,8 +32,21 @@ export class CreateUserComponent implements OnInit {
       role: Role.User,
       userData: new Worker(name)
     }).subscribe(
-      resData => {
-        console.log(resData)
+      {
+        next: resData => {
+          //console.log(resData)
+          this.errMessage = null
+          createUserForm.reset()
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log(err)
+          switch (err.status) {
+            case 500:
+              this.errMessage = err.error.message
+              break
+            default:
+          }
+        }
       }
     )
   }
