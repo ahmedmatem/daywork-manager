@@ -18,6 +18,16 @@
         {{errMessage}}
       </div>
 
+      <!-- User created successfuly TOAST area -->
+      <div class="text-center"
+           *ngIf="isUserCreated">
+        <ngb-toast [ngClass]="['bg-success', 'text-white']">
+          <i class="bi bi-hand-thumbs-up"></i>
+          <br />
+          Worker was created successfully.
+        </ngb-toast>
+      </div>
+
       <form #createUserForm="ngForm"
             (ngSubmit)="onCreateUser(createUserForm)">
         <div class="form-group">

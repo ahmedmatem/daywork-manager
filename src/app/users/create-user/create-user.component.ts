@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
   styleUrls: ['./create-user.component.css']
 })
 export class CreateUserComponent implements OnInit {
-
+  isUserCreated = false
   errMessage: string | null = null
 
   isCollapsed = true
@@ -35,11 +35,13 @@ export class CreateUserComponent implements OnInit {
       {
         next: resData => {
           //console.log(resData)
+          this.isUserCreated = true
           this.errMessage = null
           createUserForm.reset()
         },
         error: (err: HttpErrorResponse) => {
-          console.log(err)
+          //console.log(err)
+          this.isUserCreated = false
           switch (err.status) {
             case 500:
               this.errMessage = err.error.message
