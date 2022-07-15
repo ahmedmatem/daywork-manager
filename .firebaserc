@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "daywork-manager"
+  },
+  "targets": {
+    "daywork-manager": {
+      "hosting": {
+        "ClientApp": [
+          "daywork-manager"
+        ]
+      }
+    }
   }
 }
