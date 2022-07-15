@@ -23,7 +23,7 @@ export class WorkersComponent implements OnInit, OnDestroy {
 
   isLoading = false
 
-  private onFetchWorkersSub = new Subscription
+  private onWorkersChanged = new Subscription
 
   constructor(
     private authService: AuthService,
@@ -57,8 +57,8 @@ export class WorkersComponent implements OnInit, OnDestroy {
     //})
 
     // Subscribe onWorkersChanged event
-    this.onFetchWorkersSub =
-      this.workerRepository.onFetchWorkers.subscribe(
+    this.onWorkersChanged =
+      this.workerRepository.onWorkersChanged.subscribe(
         (workers: Worker[]) => {
           this.isLoading = false // stop spinner
           this.workers = workers
@@ -77,7 +77,7 @@ export class WorkersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.onFetchWorkersSub.unsubscribe()
+    this.onWorkersChanged.unsubscribe()
   }
 
   //addWorker() {

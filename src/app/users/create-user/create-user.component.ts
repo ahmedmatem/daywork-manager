@@ -5,6 +5,7 @@ import { UserService } from '../user.service';
 import { Worker } from '../../models/Worker'
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subject } from 'rxjs';
+import { WorkerRepositoryService } from '../../data/worker-repository.service';
 
 @Component({
   selector: 'app-create-user',
@@ -17,7 +18,10 @@ export class CreateUserComponent implements OnInit {
 
   isCollapsed = true
 
-  constructor(private userService: UserService) { }
+  constructor(
+    private userService: UserService,
+    private workerRepoService: WorkerRepositoryService
+  ) { }
 
   ngOnInit(): void {
   }
@@ -25,19 +29,29 @@ export class CreateUserComponent implements OnInit {
   onCreateUser(createUserForm: NgForm) {
     const { name, email, password } = createUserForm.value
     //console.log(`name: ${name}, email: ${email}, password: ${password}`)
+    const newWorker = new Worker(name)
     this.userService.create({
       displayName: name,
       email: email,
       password: password,
       role: Role.User,
-      userData: new Worker(name)
+      userData: newWorker
     }).subscribe(
       {
-        next: resData => {
+        next: resData => { // resData Object - {uid: string}
           //console.log(resData)
+
           this.isUserCreated = true
           this.errMessage = null
           createUserForm.reset()
+
+          // set worker id with uid returned from server
+          newWorker.id = (resData as {uid: string}).uid
+          const workerList = this.workerRepoService.workers
+          // update worker list with new worker
+          workerList.push(newWorker)
+          // populate worker list
+          this.workerRepoService.onWorkersChanged.next(workerList)
         },
         error: (err: HttpErrorResponse) => {
           //console.log(err)

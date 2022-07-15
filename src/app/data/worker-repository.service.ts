@@ -17,7 +17,7 @@ export class WorkerRepositoryService {
 
   onError = new Subject<string>()
   onSyncFail = new Subject<void>()
-  onFetchWorkers = new Subject<Worker[]>()
+  onWorkersChanged = new Subject<Worker[]>()
   onDayworksChanged = new Subject<IDictionary<Daywork[]>>()
 
   private _workers: Worker[] = []
@@ -136,7 +136,7 @@ export class WorkerRepositoryService {
           // Add worker in local workers array
           this._workers.push(worker)
           // Send workers changed event to observers
-          this.onFetchWorkers.next(this._workers.slice())
+          this.onWorkersChanged.next(this._workers.slice())
         },
         error => {
           this.onError.next(':( No internet connection. Check your connection and try again.')
@@ -153,7 +153,7 @@ export class WorkerRepositoryService {
       .subscribe({
         next: (workers) => {
           this._workers = workers
-          this.onFetchWorkers.next(this.workers)
+          this.onWorkersChanged.next(this.workers)
           this.workerLocalStorage.save(...workers)
         },
         error: error => {
@@ -174,7 +174,7 @@ export class WorkerRepositoryService {
       .subscribe(
         worker => {
           this._workers.push(worker)
-          this.onFetchWorkers.next(this.workers)
+          this.onWorkersChanged.next(this.workers)
         }
       )
   }
